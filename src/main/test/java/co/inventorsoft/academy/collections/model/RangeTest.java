@@ -15,7 +15,6 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(JUnit4.class)
 public class RangeTest {
-
     @Test
     public void sizeReturnsCountOfNumbersInInterval() {
         Range<Integer> integerRange = Range.of(1, 10);
