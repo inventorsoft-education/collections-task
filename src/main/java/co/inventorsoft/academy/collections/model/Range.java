@@ -76,51 +76,25 @@ public class Range<T> implements Set<T> {
 
 
     public static Range<Float> of(Float from, Float to) {
-        return of(from, to, new Function<Float, Float>() {
-
-            public Float apply(Float aFloat) {
-                return aFloat + 0.1f;
-            }
-        });
+        return of(from, to, aFloat -> aFloat + 0.1f);
     }
 
 
     public static Range<Integer> of(Integer from, Integer to) {
-        return of(from, to, new Function<Integer, Integer>() {
-
-            public Integer apply(Integer aInteger) {
-                return aInteger + 1;
-            }
-        });
+        return of(from, to, aInteger -> aInteger + 1);
     }
 
     public static Range<Double> of(Double from, Double to) {
-        return of(from, to, new Function<Double, Double>() {
-
-            public Double apply(Double aDouble) {
-                return aDouble + 0.1;
-            }
-        });
+        return of(from, to, aDouble -> aDouble + 0.1d);
     }
-
 
 
     public static Range<Short> of(Short from, Short to) {
-        return of(from, to, new Function<Short, Short>() {
-
-            public Short apply(Short aShort) {
-                return (short)(aShort + 1);
-            }
-        });
+        return of(from, to, aShort -> (short)(aShort + 1));
     }
 
     public static Range<Byte> of(Byte from, Byte to) {
-        return of(from, to, new Function<Byte, Byte>() {
-
-            public Byte apply(Byte aByte) {
-                return (byte)(aByte + 1);
-            }
-        });
+        return of(from, to, aByte -> (byte)(aByte + 1));
     }
 
 }

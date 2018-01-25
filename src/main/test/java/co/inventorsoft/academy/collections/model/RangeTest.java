@@ -1,5 +1,6 @@
-package co.inventorsoft.academy.collections.model;
+package java.co.inventorsoft.academy.collections.model;
 
+import co.inventorsoft.academy.collections.model.Range;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -58,12 +59,7 @@ public class RangeTest {
 
     @Test
     public void iteratorGeneratesCharactersForCustomType() {
-        final Range<Character> rangePoints = Range.of('a', 'd', new Function<Character, Character>() {
-            @Override
-            public Character apply(Character character) {
-                return (char) (character + 1);
-            }
-        });
+        final Range<Character> rangePoints = Range.of('a', 'd', character -> (char) (character + 1));
 
         final Iterator<Character> iterator = rangePoints.iterator();
         final List<Character> expectedCharacters = Arrays.asList('a', 'b', 'c', 'd');
