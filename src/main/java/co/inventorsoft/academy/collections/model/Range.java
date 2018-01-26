@@ -45,7 +45,11 @@ public class Range<T extends Comparable<T>> implements Set<T> {
 
     public boolean contains(Object o) {
         T t = (T) o;
-        return t.compareTo(start) > 0 && t.compareTo(end) < 0;
+        if(t != null){
+            return t.compareTo(start) >= 0 && t.compareTo(end) <= 0;
+        }else{
+            return false;
+        }
     }
 
     public Iterator<T> iterator() {
@@ -109,13 +113,9 @@ public class Range<T extends Comparable<T>> implements Set<T> {
     }
 
     public boolean remove(Object o) {
-        T t = (T) o;
-        if(t.compareTo(start) > 0){
-            if(t.compareTo(end) < 0){
-                end = t;
-                return true;
-            }
-            return false;
+        if(contains(o)){
+            end = (T) o;
+            return true;
         }else {
             return false;
         }
