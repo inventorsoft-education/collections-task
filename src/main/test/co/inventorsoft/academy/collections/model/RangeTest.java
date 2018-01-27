@@ -9,9 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @RunWith(JUnit4.class)
 public class RangeTest {
@@ -57,6 +55,7 @@ public class RangeTest {
         }
     }
 
+
     @Test
     public void iteratorGeneratesCharactersForCustomType() {
         final Range<Character> rangePoints = Range.of('a', 'd', new Function<Character, Character>() {
@@ -72,4 +71,5 @@ public class RangeTest {
             assertEquals(0, iterator.next().compareTo(character));
         }
     }
+
 }
