@@ -3,98 +3,142 @@ package co.inventorsoft.academy.collections.model;
 import java.util.*;
 import java.util.function.Function;
 
-public class Range<T> implements Set<T> {
-    private Set<T> set = new TreeSet<>();
+public class Range<T extends Comparable<T>> implements Set<T> {
+
+    private T from;
+    private T to;
+    private Function<T,T> function;
+
+    public Range(T from, T to, Function<T, T> function) {
+        this.from = from;
+        this.to = to;
+        this.function = function;
+    }
+
+    //Short and Byte type also apply in Int
+    public static Range of(Integer from, Integer to) {
+        return new Range<>(from, to, integerValue -> integerValue + 1);
+    }
+
+    public static Range of(Double from, Double to) {
+        return new Range<>(from, to, doubleValue -> doubleValue + 0.1d);
+    }
+
+    public static Range of(Float from, Float to) {
+        return new Range<>(from, to, floatValue -> floatValue + 0.1f);
+    }
+
+    public static Range of(Character from, Character to, Function<Character, Character> function) {
+        return new Range<>(from, to, function);
+    }
 
     public int size() {
-        return set.size();
+        return toArray().length;
     }
 
     public boolean isEmpty() {
-        return set.isEmpty();
+        return from.compareTo(to) == 0;
     }
 
     public boolean contains(Object o) {
-        return set.contains(o);
+        T t = (T) o;
+        if(t != null){
+            return t.compareTo(from) >= 0 && t.compareTo(to) <= 0;
+        }else{
+            return false;
+        }
     }
 
     public Iterator<T> iterator() {
-        Iterator<T> iterator = set.iterator();
-        return iterator;
+        return new Iterator<T>() {
+            T cursor;
+            @Override
+            public boolean hasNext() {
+                T next;
+                if(cursor != null) {
+                    next = function.apply(cursor);
+                }else{
+                    next = from;
+                }
+                return next.compareTo(to) <= 0;
+            }
+
+            @Override
+            public T next() {
+                if(cursor == null){
+                    cursor = from;
+                    return cursor;
+                }
+                if(cursor.compareTo(to)>0){
+                    throw new NoSuchElementException();
+                }
+                cursor = function.apply(cursor);
+                return cursor;
+            }
+        };
     }
 
     public Object[] toArray() {
-        return set.toArray();
+        List<T> list = new ArrayList<>();
+        Iterator<T> iter = this.iterator();
+        while (iter.hasNext()){
+            list.add(iter.next());
+        }
+        return list.toArray();
     }
 
     public <T1> T1[] toArray(T1[] a) {
-        return set.toArray(a);
+        List<T> list = new ArrayList<>();
+        Iterator<T> iter = this.iterator();
+        while (iter.hasNext()){
+            list.add(iter.next());
+        }
+        return list.toArray(a);
     }
 
     public boolean add(T t) {
-        return set.add(t);
+        if(t.compareTo(from) > 0){
+            if(t.compareTo(to) < 0){
+                return false;
+            }
+            to = t;
+            return true;
+        }else {
+            from = t;
+            return true;
+        }
     }
 
     public boolean remove(Object o) {
-        return set.remove(o);
+        if(contains(o)){
+            to = (T) o;
+            return true;
+        }else {
+            return false;
+        }
     }
+
 
     public boolean containsAll(Collection<?> c) {
-        return set.containsAll(c);
+        return c.stream()
+                .filter(this::contains)
+                .count() == c.size();
     }
 
+    //not use
     public boolean addAll(Collection<? extends T> c) {
-        return set.addAll(c);
+        return false;
     }
-
+    //not use
     public boolean retainAll(Collection<?> c) {
-        return set.retainAll(c);
+        return false;
     }
-
+    //not use
     public boolean removeAll(Collection<?> c) {
-        return set.removeAll(c);
+        return false;
     }
 
     public void clear() {
-        set.clear();
+        to = from;
     }
-
-
-    public static <T extends Comparable> Range<T> of(T first, T last, Function<T, T> increment) {
-        Range<T> range = new Range<>();
-        if (first.compareTo(last) == 0) {
-            return range;
-        }
-
-        T next = first;
-        while (next.compareTo(last) <= 0) {
-            range.add(next);
-            next = increment.apply(next);
-        }
-        return range;
-    }
-
-
-    public static Range<Float> of(Float from, Float to) {
-        return of(from, to, aFloat -> aFloat + 0.1f);
-    }
-
-
-    public static Range<Integer> of(Integer from, Integer to) {
-        return of(from, to, aInteger -> aInteger + 1);
-    }
-
-    public static Range<Double> of(Double from, Double to) {
-        return of(from, to, aDouble -> aDouble + 0.1d);
-    }
-
-
-    public static Range<Short> of(Short from, Short to) {
-        return of(from, to, aShort -> (short)(aShort + 1));
-    }
-
-    public static Range<Byte> of(Byte from, Byte to) {
-        return of(from, to, aByte -> (byte)(aByte + 1));
-    }
-
 }
