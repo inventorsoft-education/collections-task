@@ -147,7 +147,7 @@ public class Range<T> implements Set<T> {
     }
 
     public boolean removeAll(Collection<?> c) {
-        return set.retainAll(c);
+        return set.removeAll(c);
     }
 
     public void clear() {
