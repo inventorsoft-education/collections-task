@@ -12,92 +12,92 @@ public class Range<T> implements Set<T> {
     private Range() {
     }
 
-    public static <T1 extends Number> Range<T1> of(T1 a, T1 b){
+    public static <T1 extends Number> Range<T1> of(T1 from, T1 to){
         Range<T1> range = new Range<>();
-        if (!a.equals(b)){
-            range.buildNumberRangeSet(a,b);
+        if (!from.equals(to)){
+            range.buildNumberRangeSet(from,to);
         }
         return range;
     }
 
-    public static <T1> Range<T1> of(T1 a, T1 b, Function<T1,T1> function){
+    public static <T1> Range<T1> of(T1 from, T1 to, Function<T1,T1> function){
         Range<T1> range = new Range<>();
-        if (!a.equals(b) && a instanceof Comparable){
+        if (!from.equals(to) && from instanceof Comparable){
             //add first range element into set
-            range.set.add(a);
+            range.set.add(from);
             do {
-                a = function.apply(a); // calculate next value
-                range.set.add(a);//add range element into set
+                from = function.apply(from); // calculate next value
+                range.set.add(from);//add range element into set
             }
-            while (!a.equals(b));
+            while (!from.equals(to));
 
         }
         return range;
     }
 
-    private void buildNumberRangeSet(T a, T b) {
+    private void buildNumberRangeSet(T from, T to) {
         //identifying type of number
-        if (a instanceof Byte) buildNumberRangeSet((Byte)a, (Byte)b);
-        else if (a instanceof Short) buildNumberRangeSet((Short)a, (Short)b);
-        else if (a instanceof Integer) buildNumberRangeSet((Integer)a, (Integer)b);
-        else if (a instanceof Long) buildNumberRangeSet((Long)a, (Long)b);
-        else if (a instanceof Float) buildNumberRangeSet((Float)a, (Float)b);
-        else if (a instanceof Double) buildNumberRangeSet((Double)a, (Double)b);
+        if (from instanceof Byte) buildNumberRangeSet((Byte)from, (Byte)to);
+        else if (from instanceof Short) buildNumberRangeSet((Short)from, (Short)to);
+        else if (from instanceof Integer) buildNumberRangeSet((Integer)from, (Integer)to);
+        else if (from instanceof Long) buildNumberRangeSet((Long)from, (Long)to);
+        else if (from instanceof Float) buildNumberRangeSet((Float)from, (Float)to);
+        else if (from instanceof Double) buildNumberRangeSet((Double)from, (Double)to);
     }
 
-    private void buildNumberRangeSet(Byte a, Byte b){
+    private void buildNumberRangeSet(Byte from, Byte to){
         //building a range set
-        while (a <= b){
-            set.add((T) a);
-            a = (byte)(a+1);
+        while (from <= to){
+            set.add((T) from);
+            from = (byte)(from+1);
         }
     }
 
-    private void buildNumberRangeSet(Short a, Short b){
+    private void buildNumberRangeSet(Short from, Short to){
         //building a range set
         set.clear();
-        while (a <= b){
-            set.add((T) a);
-            a = (short)(a+1);
+        while (from <= to){
+            set.add((T) from);
+            from = (short)(from+1);
         }
     }
 
-    private void buildNumberRangeSet(Integer a, Integer b){
+    private void buildNumberRangeSet(Integer from, Integer to){
         //building a range set
-        while (a <= b){
-            set.add((T) a);
-            a +=1;
+        while (from <= to){
+            set.add((T) from);
+            from +=1;
         }
     }
 
-    private void buildNumberRangeSet(Long a, Long b){
+    private void buildNumberRangeSet(Long from, Long to){
         //building a range set
-        while (a <= b){
-            set.add((T) a);
-            a = (long)(a+1);
+        while (from <= to){
+            set.add((T) from);
+            from = (long)(from+1);
         }
 
     }
 
-    private void buildNumberRangeSet(Float a, Float b){
+    private void buildNumberRangeSet(Float from, Float to){
         //setting one digit precision after comma
-        a = BigDecimal.valueOf(a).setScale(1, RoundingMode.HALF_UP).floatValue();
+        from = BigDecimal.valueOf(from).setScale(1, RoundingMode.HALF_UP).floatValue();
 
         //building a range set
-        while (a <= b){
-            set.add((T) a);
-            a += 0.1f;
+        while (from <= to){
+            set.add((T) from);
+            from += 0.1f;
         }
     }
 
-    private void buildNumberRangeSet(Double a, Double b){
+    private void buildNumberRangeSet(Double from, Double to){
         //setting one digit precision after comma
-        a = BigDecimal.valueOf(a).setScale(1, RoundingMode.HALF_UP).doubleValue();
+        from = BigDecimal.valueOf(from).setScale(1, RoundingMode.HALF_UP).doubleValue();
 
         //building a range set
-        while (a <= b){
-            set.add((T) a);
-            a += 0.1f;
+        while (from <= to){
+            set.add((T) from);
+            from += 0.1f;
         }
     }
 
