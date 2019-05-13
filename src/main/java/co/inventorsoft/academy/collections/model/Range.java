@@ -1,60 +1,273 @@
 package co.inventorsoft.academy.collections.model;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
 
-public class Range<T> implements Set<T> {
+public class Range<T extends Comparable<T>> implements Set<T> {
 
-    public int size() {
-        return 0;
+    private int size = 0;
+    private Node<T> first;
+    private Node<T> last;
+    private Function<T, T> function;
+
+    private static class Node<V> {
+        V item;
+        Node<V> next;
+        Node<V> prev;
+        int id;
+
+        public Node(V item, int id) {
+            this.item = item;
+            this.id = id;
+        }
+
+        Node(Node<V> prev, V element, Node<V> next) {
+            this.item = element;
+            this.next = next;
+            this.prev = prev;
+        }
     }
 
-    public boolean isEmpty() {
-        return false;
+    public static Range<Integer> of(Integer start, Integer end) {
+        Range<Integer> range = new Range<>();
+        if (start < end) {
+            for (Integer i = start; i <= end; i++) {
+                range.add(i);
+            }
+        }
+        return range;
     }
 
-    public boolean contains(Object o) {
-        return false;
+    public static Range<Float> of(Float start, Float end) {
+        Range<Float> range = new Range<>();
+        for (Float i = start; i <= end; i += 0.1f) {
+            range.add(i);
+        }
+        return range;
     }
 
-    public Iterator<T> iterator() {
-        return null;
-    }
-
-    public Object[] toArray() {
-        return new Object[0];
-    }
-
-    public <T1> T1[] toArray(T1[] a) {
-        return null;
+    public static Range<Character> of(Character start, Character end, Function<Character, Character> func) {
+        Range<Character> range = new Range<>();
+        for (Character i = start; i.compareTo(end) <= 0; i = func.apply(i)) {
+            range.add(i);
+        }
+        return range;
     }
 
     public boolean add(T t) {
-        return false;
+        boolean flag = false;
+        if (last == null) {
+            addNode(t);
+        } else {
+            if (!contains(t)) {
+                flag = true;
+                addNode(t);
+            }
+        }
+        return flag;
+    }
+
+    private boolean addNode(T t) {
+        final Node<T> l = last;
+        final Node<T> newNode = new Node<>(l, t, null);
+        last = newNode;
+        if (l == null) {
+            first = newNode;
+        } else {
+            l.next = newNode;
+        }
+        size++;
+        return true;
+    }
+
+    public int size() {
+        return size;
+    }
+
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    public boolean contains(Object o) {
+        boolean flag = false;
+        Iterator<T> iter = iterator();
+        while (iter.hasNext()) {
+            if (o.equals(iter.next())) {
+                flag = true;
+            }
+        }
+        return flag;
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new Iterator<T>() {
+
+            private Node<T> lastReturned;
+            private Node<T> next = first;
+            private int nextIndex = 0;
+
+            @Override
+            public boolean hasNext() {
+                return size > nextIndex;
+            }
+
+            @Override
+            public T next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                } else {
+                    lastReturned = next;
+                    next = next.next;
+                    nextIndex++;
+                }
+                return lastReturned.item;
+            }
+
+            @Override
+            public void remove() {
+                if (lastReturned == null)
+                    throw new IllegalStateException();
+
+                Node<T> lastNext = lastReturned.next;
+                if (next == lastReturned)
+                    next = lastNext;
+                else
+                    nextIndex--;
+                lastReturned = null;
+            }
+        };
+    }
+
+    public Object[] toArray() {
+        Object[] result = new Object[size];
+        int i = 0;
+
+        Iterator<T> iter = iterator();
+        while (iter.hasNext()) {
+            result[i] = iter.next();
+            i++;
+        }
+
+        return result;
+    }
+
+    public <T1> T1[] toArray(T1[] a) {
+        if (a.length < size)
+            a = (T1[]) java.lang.reflect.Array.newInstance(
+                    a.getClass().getComponentType(), size);
+        int i = 0;
+        Object[] result = a;
+        for (Node<T> x = first; x != null; x = x.next)
+            result[i++] = x.item;
+
+        if (a.length > size)
+            a[size] = null;
+
+        return a;
     }
 
     public boolean remove(Object o) {
+        if (o == null) {
+            for (Node<T> x = first; x != null; x = x.next) {
+                if (x.item == null) {
+                    unlink(x);
+                    return true;
+                }
+            }
+        } else {
+            for (Node<T> x = first; x != null; x = x.next) {
+                if (o.equals(x.item)) {
+                    unlink(x);
+                    return true;
+                }
+            }
+        }
         return false;
+    }
+
+    T unlink(Node<T> x) {
+        final T element = x.item;
+        final Node<T> next = x.next;
+        final Node<T> prev = x.prev;
+
+        if (prev == null) {
+            first = next;
+        } else {
+            prev.next = next;
+            x.prev = null;
+        }
+
+        if (next == null) {
+            last = prev;
+        } else {
+            next.prev = prev;
+            x.next = null;
+        }
+
+        x.item = null;
+        size--;
+        return element;
     }
 
     public boolean containsAll(Collection<?> c) {
-        return false;
+        boolean flag = false;
+        for (Object e : c) {
+            if (contains(e)) {
+                flag = true;
+            }
+        }
+        return flag;
     }
 
     public boolean addAll(Collection<? extends T> c) {
-        return false;
+        boolean flag = false;
+        for (T t : c) {
+            if (add(t)) {
+                flag = true;
+            }
+        }
+        return flag;
     }
 
     public boolean retainAll(Collection<?> c) {
-        return false;
+        boolean flag = false;
+        Iterator<T> e = iterator();
+        while (e.hasNext()) {
+            if (!c.contains(e.next())) {
+                e.remove();
+                flag = true;
+            }
+        }
+        return flag;
     }
 
     public boolean removeAll(Collection<?> c) {
-        return false;
+        Objects.requireNonNull(c);
+        boolean flag = false;
+
+        if (size() > c.size()) {
+            for (Iterator<?> i = c.iterator(); i.hasNext(); )
+                flag |= remove(i.next());
+        } else {
+            for (Iterator<?> i = iterator(); i.hasNext(); ) {
+                if (c.contains(i.next())) {
+                    i.remove();
+                    flag = true;
+                }
+            }
+        }
+        return flag;
     }
 
     public void clear() {
-
+        for (Node<T> x = first; x != null; ) {
+            Node<T> next = x.next;
+            x.item = null;
+            x.next = null;
+            x = next;
+        }
+        first = last = null;
+        size = 0;
     }
 }
