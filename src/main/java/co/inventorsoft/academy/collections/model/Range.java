@@ -3,7 +3,7 @@ package co.inventorsoft.academy.collections.model;
 import java.util.*;
 import java.util.function.Function;
 
-public class Range<T> implements Set<T> , Comparable {
+public class Range<T> implements Set<T>{
 
     static Object[] elementData = new Object[10];
     static int modCount = 0;
