@@ -64,7 +64,7 @@ public class Range<T extends Comparable<T>> implements Set<T> {
         return flag;
     }
 
-    private boolean addNode(T t) {
+    private void addNode(T t) {
         final Node<T> l = last;
         final Node<T> newNode = new Node<>(l, t, null);
         last = newNode;
@@ -74,7 +74,6 @@ public class Range<T extends Comparable<T>> implements Set<T> {
             l.next = newNode;
         }
         size++;
-        return true;
     }
 
     public int size() {
