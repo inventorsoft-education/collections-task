@@ -15,32 +15,20 @@ public class Range<T> implements Set<T> {
     }
 
     public static Range<Integer> of(int e1, int e2){
-        Range<Integer> range = new Range<>();
-        if (e1 < e2){
-            for (Integer i = e1; i <= e2; i++){
-                range.add(i);
-            }
-        }
-        return range;
+        return of(e1, e2, integer -> (integer + 1));
     }
 
     public static Range<Float> of(float e1, float e2){
-        Range<Float> range = new Range<>();
-        if (e1 < e2){
-            for (Float i = e1; i <= e2; i = i + 0.1f){
-                range.add(i);
-            }
-        }
-        return range;
+        return of(e1, e2, f -> (f + 0.1f));
     }
 
-    public static Range<Character> of(char e1, char e2, Function function){
-        Range<Character> range = new Range<>();
-        if (e1 < e2){
-            char i = e1;
-            while(i <= e2){
+    public static <T extends Comparable> Range<T> of (T e1, T e2, Function<T, T> function){
+        Range<T> range = new Range<>();
+        if (e1.compareTo(e2) < 0){
+            T i = e1;
+            while(i.compareTo(e2) <= 0){
                 range.add(i);
-                i = (Character) function.apply(i);
+                i =  function.apply(i);
             }
         }
         return range;
