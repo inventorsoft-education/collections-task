@@ -18,28 +18,53 @@ public class RangeTest {
 
     @Test
     public void sizeReturnsCountOfNumbersInInterval() {
-        Range<Integer> integerRange = Range.of(1, 10);
+        Range<Integer> integerRange = Range.of(1, 10, new Function<Integer, Integer>() {
+            @Override
+            public Integer apply(Integer integer) {
+                return (integer + 1);
+            }
+        });
         assertEquals(10, integerRange.size());
     }
 
     @Test
     public void isEmptyWorksForBothEmptyAndNonEmptyIntervals() {
-        Range<Integer> integerRange = Range.of(1, 10);
+        Range<Integer> integerRange = Range.of(1, 10, new Function<Integer, Integer>() {
+            @Override
+            public Integer apply(Integer integer) {
+                return (integer + 1);
+            }
+        });
         assertFalse(integerRange.isEmpty());
 
-        Range<Integer> emptyRange = Range.of(1, 1);
+        Range<Integer> emptyRange = Range.of(1, 1, new Function<Integer, Integer>() {
+            @Override
+            public Integer apply(Integer integer) {
+                return (integer + 1);
+            }
+        });
         assertTrue(emptyRange.isEmpty());
     }
 
     @Test
     public void containsMatchesIfElementIsInTheRange() {
-        Range<Integer> integerRange = Range.of(1, 10);
+        Range<Integer> integerRange = Range.of(1, 10, new Function<Integer, Integer>() {
+            @Override
+            public Integer apply(Integer integer) {
+                return (integer + 1);
+            }
+        });
         assertTrue(integerRange.contains(5));
     }
 
     @Test
     public void iteratorGeneratesIntegersIn1Step() {
-        Range<Integer> integerRange = Range.of(1, 10);
+        Range<Integer> integerRange = Range.of(1, 10, new Function<Integer, Integer>() {
+            @Override
+            public Integer apply(Integer integer) {
+                return (integer + 1);
+            }
+        });
         final List<Integer> expectedElements = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
         assertEquals(10, integerRange.size());
         for (Integer number : integerRange) {
@@ -49,7 +74,12 @@ public class RangeTest {
 
     @Test
     public void iteratorGeneratesIntegersIn01Step() {
-        Range<Float> doubleRange = Range.of(0.1f, 0.5f);
+        Range<Float> doubleRange = Range.of(0.1f, 0.5f, new Function<Float, Float>() {
+            @Override
+            public Float apply(Float f) {
+                return (f + 0.1f);
+            }
+        });
         final List<Float> expectedElements = Arrays.asList(0.1f, 0.2f, 0.3f, 0.4f, 0.5f);
         assertEquals(5, doubleRange.size());
         for (Float number : doubleRange) {

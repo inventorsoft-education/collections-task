@@ -25,28 +25,12 @@ public class Range<T extends Comparable<T>> implements Set<T> {
         }
     }
 
-    public static Range<Integer> of(Integer start, Integer end) {
-        Range<Integer> range = new Range<>();
-        if (start < end) {
-            for (Integer i = start; i <= end; i++) {
+    public static <T extends Comparable> Range of(T start, T end, Function<T, T> func) {
+        Range range = new Range<>();
+        if (start.compareTo(end) < 0) {
+            for (T i = start; i.compareTo(end) <= 0; i = func.apply(i)) {
                 range.add(i);
             }
-        }
-        return range;
-    }
-
-    public static Range<Float> of(Float start, Float end) {
-        Range<Float> range = new Range<>();
-        for (Float i = start; i <= end; i += 0.1f) {
-            range.add(i);
-        }
-        return range;
-    }
-
-    public static Range<Character> of(Character start, Character end, Function<Character, Character> func) {
-        Range<Character> range = new Range<>();
-        for (Character i = start; i.compareTo(end) <= 0; i = func.apply(i)) {
-            range.add(i);
         }
         return range;
     }
@@ -208,10 +192,10 @@ public class Range<T extends Comparable<T>> implements Set<T> {
     }
 
     public boolean containsAll(Collection<?> c) {
-        boolean flag = false;
+        boolean flag = true;
         for (Object e : c) {
-            if (contains(e)) {
-                flag = true;
+            if (!contains(e)) {
+                flag = false;
             }
         }
         return flag;
