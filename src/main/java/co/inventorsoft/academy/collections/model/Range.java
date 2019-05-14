@@ -3,13 +3,16 @@ package co.inventorsoft.academy.collections.model;
 import java.util.*;
 import java.util.function.Function;
 
-public class Range<T> implements Set<T> {
+public class Range<T extends Comperable> implements Set<T> {
 
     private ArrayList<T> elementData  = new ArrayList<>();
     private T to;
     private T from;
 
     public Range(T from, T to, Function<T, T> function) {
+        if(from.compareTo(to)>0){
+            return;
+        }
         this.from = from;
         this.to = to;
         if(!(from.equals(to))) {
