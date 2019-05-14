@@ -12,39 +12,24 @@ public class Range<T> implements Set<T> {
     public Range(T from, T to, Function<T, T> function) {
         this.from = from;
         this.to = to;
+        if(!(from.equals(to))) {
 
-        do{
-            this.elementData.add(from);
-            from = function.apply(from);
+            do {
+                this.elementData.add(from);
+                from = function.apply(from);
+            }
+            while (!(from.equals(to)));
+            this.elementData.add(to);
         }
-        while (!(from.equals(to)));
-        this.elementData.add(to);
-       /* while (function.apply(from)) {
-            this.elementData.add(from);
-        }*/
     }
 
 
     public static Range<Integer> of(Integer from, Integer to) {
-        Range<Integer> range = new Range<>(from, to, intValue -> intValue + 1);
-        range.from = from;
-        range.to = to;
-        for(Integer j = range.from; j<=range.to; j++){
-            range.add(j);
-        }
-        return range;
-
+        return new Range<>(from, to, intValue -> intValue + 1);
     }
 
     public static Range<Float> of(Float from, Float to) {
-        Range<Float> range = new Range<>(from, to, intValue -> intValue + 1);
-        range.from = from;
-        range.to = to;
-        for(Float j = from; j<=to; j=j+0.1f){
-            range.add(j);
-        }
-        return range;
-
+        return new Range<>(from, to, floatValue -> floatValue + 0.1f);
     }
 
     public static Range<Character> of(char from, char to, Function<Character, Character> characterCharacterFunction) {
@@ -112,10 +97,4 @@ public class Range<T> implements Set<T> {
         this.elementData.clear();
     }
 
-   /* @Override
-    public int compareTo(Object o) {
-        if(this == o)
-            return 0;
-        return 1;
-    }*/
 }
