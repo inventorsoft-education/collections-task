@@ -5,6 +5,7 @@ import java.util.function.Function;
 
 public class Range<T extends Comparable<T>> implements Set<T> {
 
+    private static final float FLOAT_STEP = 0.1f;
     private int size = 0;
     private Node<T> first;
     private Node<T> last;
@@ -25,14 +26,28 @@ public class Range<T extends Comparable<T>> implements Set<T> {
         }
     }
 
-    public static <T extends Comparable> Range of(T start, T end, Function<T, T> func) {
-        Range range = new Range<>();
-        if (start.compareTo(end) < 0) {
-            for (T i = start; i.compareTo(end) <= 0; i = func.apply(i)) {
-                range.add(i);
-            }
+    public static Range<Integer> of(Integer start, Integer end) {
+        return new Range<>(start, end, value -> ++value);
+    }
+
+    public static Range<Float> of(Float start, Float end) {
+        return new Range<>(start, end, value -> value + FLOAT_STEP);
+    }
+
+    public static Range<Character> of(Character start, Character end, Function<Character, Character> func) {
+        return new Range<>(start, end, func);
+    }
+
+    public Range(T start, T end, Function<T, T> func) {
+        if (start.compareTo(end) > 0) {
+            throw new IllegalArgumentException("[start] can't be greater than [end]");
+        } else if (start.compareTo(end) < 0) {
+            T current = start;
+            do {
+                addNode(current);
+                current = func.apply(current);
+            } while (current.compareTo(end) <= 0);
         }
-        return range;
     }
 
     public boolean add(T t) {
@@ -192,10 +207,10 @@ public class Range<T extends Comparable<T>> implements Set<T> {
     }
 
     public boolean containsAll(Collection<?> c) {
-        boolean flag = true;
+        boolean flag = false;
         for (Object e : c) {
-            if (!contains(e)) {
-                flag = false;
+            if (contains(e)) {
+                flag = true;
             }
         }
         return flag;
