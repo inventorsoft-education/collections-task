@@ -10,97 +10,66 @@ public class Range<T> implements Set<T> {
     private Set<T> set = new TreeSet<>();
 
     private Range() {
+
     }
 
-    public static <T1 extends Number> Range<T1> of(T1 from, T1 to){
-        Range<T1> range = new Range<>();
-        if (!from.equals(to)){
-            range.buildNumberRangeSet(from,to);
-        }
+    public static Range<Byte> of(Byte from, Byte to){
+        Range<Byte> range = new Range<>();
+        range.buildRangeSet(from, to, t1 -> (byte)(t1 + 1));
         return range;
     }
 
-    public static <T1> Range<T1> of(T1 from, T1 to, Function<T1,T1> function){
-        Range<T1> range = new Range<>();
-        if (!from.equals(to) && from instanceof Comparable){
-            //add first range element into set
-            range.set.add(from);
-            do {
-                from = function.apply(from); // calculate next value
-                range.set.add(from);//add range element into set
-            }
-            while (!from.equals(to));
-
-        }
+    public static Range<Short> of(Short from, Short to){
+        Range<Short> range = new Range<>();
+        range.buildRangeSet(from, to, t1 -> (short)(t1 + 1));
         return range;
     }
 
-    private void buildNumberRangeSet(T from, T to) {
-        //identifying type of number
-        if (from instanceof Byte) buildNumberRangeSet((Byte)from, (Byte)to);
-        else if (from instanceof Short) buildNumberRangeSet((Short)from, (Short)to);
-        else if (from instanceof Integer) buildNumberRangeSet((Integer)from, (Integer)to);
-        else if (from instanceof Long) buildNumberRangeSet((Long)from, (Long)to);
-        else if (from instanceof Float) buildNumberRangeSet((Float)from, (Float)to);
-        else if (from instanceof Double) buildNumberRangeSet((Double)from, (Double)to);
+    public static Range<Integer> of(Integer from, Integer to){
+        Range<Integer> range = new Range<>();
+        range.buildRangeSet(from, to, t1 -> t1 + 1);
+        return range;
     }
 
-    private void buildNumberRangeSet(Byte from, Byte to){
-        //building a range set
-        while (from <= to){
-            set.add((T) from);
-            from = (byte)(from+1);
-        }
+    public static Range<Long> of(Long from, Long to){
+        Range<Long> range = new Range<>();
+        range.buildRangeSet(from, to, t1 -> t1 + 1);
+        return range;
     }
 
-    private void buildNumberRangeSet(Short from, Short to){
-        //building a range set
-        set.clear();
-        while (from <= to){
-            set.add((T) from);
-            from = (short)(from+1);
-        }
-    }
-
-    private void buildNumberRangeSet(Integer from, Integer to){
-        //building a range set
-        while (from <= to){
-            set.add((T) from);
-            from +=1;
-        }
-    }
-
-    private void buildNumberRangeSet(Long from, Long to){
-        //building a range set
-        while (from <= to){
-            set.add((T) from);
-            from = (long)(from+1);
-        }
-
-    }
-
-    private void buildNumberRangeSet(Float from, Float to){
-        //setting one digit precision after comma
+    public static Range<Float> of(Float from, Float to){
+        Range<Float> range = new Range<>();
         from = BigDecimal.valueOf(from).setScale(1, RoundingMode.HALF_UP).floatValue();
-
-        //building a range set
-        while (from <= to){
-            set.add((T) from);
-            from += 0.1f;
-        }
+        range.buildRangeSet(from, to, t1 -> t1 + 0.1f);
+        return range;
     }
 
-    private void buildNumberRangeSet(Double from, Double to){
-        //setting one digit precision after comma
+    public static Range<Double> of(Double from, Double to){
+        Range<Double> range = new Range<>();
         from = BigDecimal.valueOf(from).setScale(1, RoundingMode.HALF_UP).doubleValue();
-
-        //building a range set
-        while (from <= to){
-            set.add((T) from);
-            from += 0.1f;
-        }
+        range.buildRangeSet(from, to, t1 -> t1 + 0.1);
+        return range;
     }
 
+    public static <T1 extends Comparable> Range<T1> of(T1 from, T1 to, Function<T1,T1> function){
+        Range<T1> range = new Range<>();
+        range.buildRangeSet(from,to,function);
+        return range;
+    }
+
+    private void buildRangeSet(T from, T to, Function<T,T> function){
+        if (from.equals(to)){
+            return;
+        }
+
+        //add first range element into set
+        set.add(from);
+        do {
+            from = function.apply(from); // calculate next value
+            set.add(from);//add range element into set
+        }
+        while (!from.equals(to));
+    }
 
     public int size() {
         return set.size();
@@ -172,6 +141,6 @@ public class Range<T> implements Set<T> {
 
     @Override
     public int hashCode() {
-        return set != null ? set.hashCode() : 0;
+        return set.hashCode();
     }
 }
