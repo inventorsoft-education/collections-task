@@ -207,10 +207,10 @@ public class Range<T extends Comparable<T>> implements Set<T> {
     }
 
     public boolean containsAll(Collection<?> c) {
-        boolean flag = false;
+        boolean flag = true;
         for (Object e : c) {
-            if (contains(e)) {
-                flag = true;
+            if (!contains(e)) {
+                flag = false;
             }
         }
         return flag;
