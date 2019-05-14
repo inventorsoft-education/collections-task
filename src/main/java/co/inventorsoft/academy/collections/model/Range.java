@@ -63,7 +63,6 @@ public class Range<T> implements Set<T> {
     public boolean add(T t) {
 
         if(this.elementData.indexOf(t) >= 0){
-
             return false;
         }
 
@@ -81,12 +80,13 @@ public class Range<T> implements Set<T> {
     }
 
     public boolean addAll(Collection<? extends T> c) {
+        boolean flag = false;
         for (T element:c) {
-            if(!(this.elementData.add(element))){
-                return false;
+            if((this.elementData.add(element))){
+                flag = true;
             }
         }
-        return true;
+        return flag;
     }
 
     public boolean retainAll(Collection<?> c) {
