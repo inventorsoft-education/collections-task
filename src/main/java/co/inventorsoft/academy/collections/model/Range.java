@@ -8,17 +8,14 @@ public class Range<T extends Comparable<T>> implements Set<T> {
     private int size = 0;
     private Node<T> first;
     private Node<T> last;
-    private Function<T, T> function;
 
     private static class Node<V> {
         V item;
         Node<V> next;
         Node<V> prev;
-        int id;
 
-        public Node(V item, int id) {
+        public Node(V item) {
             this.item = item;
-            this.id = id;
         }
 
         Node(Node<V> prev, V element, Node<V> next) {
@@ -94,6 +91,7 @@ public class Range<T extends Comparable<T>> implements Set<T> {
         while (iter.hasNext()) {
             if (o.equals(iter.next())) {
                 flag = true;
+                break;
             }
         }
         return flag;
@@ -130,10 +128,10 @@ public class Range<T extends Comparable<T>> implements Set<T> {
                     throw new IllegalStateException();
 
                 Node<T> lastNext = lastReturned.next;
-                if (next == lastReturned)
+                if (next == lastReturned) {
                     next = lastNext;
-                else
-                    nextIndex--;
+                }
+                nextIndex--;
                 lastReturned = null;
             }
         };
@@ -221,9 +219,12 @@ public class Range<T extends Comparable<T>> implements Set<T> {
     }
 
     public boolean addAll(Collection<? extends T> c) {
-        boolean flag = false;
+        boolean flag = true;
         for (T t : c) {
-            if (add(t)) {
+            if (contains(t)) {
+                flag = false;
+            } else {
+                add(t);
                 flag = true;
             }
         }
@@ -231,12 +232,12 @@ public class Range<T extends Comparable<T>> implements Set<T> {
     }
 
     public boolean retainAll(Collection<?> c) {
-        boolean flag = false;
+        boolean flag = true;
         Iterator<T> e = iterator();
         while (e.hasNext()) {
             if (!c.contains(e.next())) {
                 e.remove();
-                flag = true;
+                flag = false;
             }
         }
         return flag;
@@ -246,15 +247,10 @@ public class Range<T extends Comparable<T>> implements Set<T> {
         Objects.requireNonNull(c);
         boolean flag = false;
 
-        if (size() > c.size()) {
-            for (Iterator<?> i = c.iterator(); i.hasNext(); )
-                flag |= remove(i.next());
-        } else {
-            for (Iterator<?> i = iterator(); i.hasNext(); ) {
-                if (c.contains(i.next())) {
-                    i.remove();
-                    flag = true;
-                }
+        for (Iterator<?> i = iterator(); i.hasNext(); ) {
+            if (c.contains(i.next())) {
+                i.remove();
+                flag = true;
             }
         }
         return flag;
