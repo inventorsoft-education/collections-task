@@ -37,7 +37,7 @@ public class Range<T extends Comparable<T>> implements Set<T> {
     public static <T extends Comparable> Range of(T start, T end, Function<T, T> func) {
         return new Range(start, end, func);
     }
-
+//
     public Range(T start, T end, Function<T, T> func) {
         if (start.compareTo(end) > 0) {
             throw new IllegalArgumentException("[start] can't be greater than [end]");
