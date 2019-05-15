@@ -34,8 +34,8 @@ public class Range<T extends Comparable<T>> implements Set<T> {
         return new Range<>(start, end, value -> value + FLOAT_STEP);
     }
 
-    public static Range<Character> of(Character start, Character end, Function<Character, Character> func) {
-        return new Range<>(start, end, func);
+    public static <T extends Comparable> Range of(T start, T end, Function<T, T> func) {
+        return new Range(start, end, func);
     }
 
     public Range(T start, T end, Function<T, T> func) {
