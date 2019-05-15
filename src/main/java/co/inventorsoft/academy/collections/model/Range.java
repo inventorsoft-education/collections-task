@@ -10,19 +10,21 @@ public class Range<T extends Comperable> implements Set<T> {
     private T from;
 
     public Range(T from, T to, Function<T, T> function) {
-        if(from.compareTo(to)>0){
-            return;
-        }
-        this.from = from;
-        this.to = to;
-        if(!(from.equals(to))) {
+        if(!(from.compareTo(to)>0)) {
+            this.from = from;
+            this.to = to;
+            if (!(from.equals(to))) {
 
-            do {
-                this.elementData.add(from);
-                from = function.apply(from);
+                do {
+                    this.elementData.add(from);
+                    from = function.apply(from);
+                }
+                while (!(from.equals(to)));
+                this.elementData.add(to);
             }
-            while (!(from.equals(to)));
-            this.elementData.add(to);
+        }
+        else{
+            throw new IllegalArgumentException("Invalid arguments!");
         }
     }
 
