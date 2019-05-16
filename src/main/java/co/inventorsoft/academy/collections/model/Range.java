@@ -1,10 +1,9 @@
-package co.inventorsoft.academy.collections.model;
+package model;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
 
-public class Range<T> implements Set<T> {
+public class Range<T>  implements Set<T>  {
 
     ArrayList<T> arrayList = new ArrayList<>();
 
@@ -36,6 +35,7 @@ public class Range<T> implements Set<T> {
     }
 
     public boolean add(T t) {
+        if (arrayList.contains(t)) return false;
         return  arrayList.add(t);
     }
 
@@ -68,26 +68,15 @@ public class Range<T> implements Set<T> {
     }
 
 
+
     public static Range<Integer> of(int i, int i1) {
-       Range<Integer> range= new Range<>();
-       if (i<i1) {
-           for (int j = i; j <= i1; j++) {
-               range.add(j);
-           }
-       }
-        return range;
+
+        return of(i, i1, integer -> (integer + 1));
     }
 
     public static Range<Float> of(float v, float v1) {
 
-        Range<Float> range= new Range<>();
-        if (v<v1) {
-            for (float j = v; j <= v1; j += 0.1f) {
-                range.add(j);
-            }
-        }
-        return range;
-
+        return of(v, v1, f -> (f + 0.1f));
 
     }
 
@@ -97,6 +86,18 @@ public class Range<T> implements Set<T> {
         if (a<d) {
             for (int j = a; j <= d; j ++) {
                 range.add((char) j);
+            }
+        }
+        return range;
+    }
+
+    public static <T extends Comparable> Range<T> of (T e1, T e2, Function<T, T> function) {
+        Range<T> range = new Range<>();
+        if (e1.compareTo(e2) < 0) {
+            T i = e1;
+            while (i.compareTo(e2) <= 0) {
+                range.add(i);
+                i = function.apply(i);
             }
         }
         return range;
