@@ -33,12 +33,15 @@ public class Range<T> implements Set<T> {
         Node bucket = buckets[index];
         boolean flag = false;
 
-        if (bucket == null) {
+        if (buckets[index]==null || buckets[index].getNext() == null ||  buckets[index].getData()==null) {
             return flag;
         }
 
         if (bucket.data.equals(o)) {
             flag = true;
+        }
+        else{
+            flag=false;
         }
         return flag;
     }
@@ -58,7 +61,7 @@ public class Range<T> implements Set<T> {
             public T next() {
                 Object tmp = start;
 
-                if (hasNext()){
+                if (hasNext()&& size!=0){
                     tmp=start.getData();
                     current=start;
                     start=current.getNext();
@@ -79,7 +82,11 @@ public class Range<T> implements Set<T> {
         Object array[] = new Object[size];
         for (int i = 0; i < size; i++) {
             if (buckets[i] != null) {
-                array[i] = buckets[i];
+                for(int j=0;j<size;j++){
+                    if (array[j]!=buckets[i]){
+                        array[i] = buckets[i];
+                    }
+                }
             }
         }
         return array;
@@ -92,7 +99,7 @@ public class Range<T> implements Set<T> {
     public boolean add(T t) {
 
         //changing size if not enough
-        if (size >= 14) {
+        if (size >= INITIAL_CAPACITY) {
             Node[] newBuckets = new Node[size * 2];
             for (int i = 0; i < size; i++) {
                 newBuckets[i] = buckets[i];
@@ -112,16 +119,20 @@ public class Range<T> implements Set<T> {
                 buckets[index] = newNode;
                 size++;
                 current=buckets[index];
-                start=buckets[index];
+                start=current;
                 return true;
 
-            }else {
+            }else  {
             buckets[index] = newNode;
             size++;
             current.setNext(buckets[index]);
             current=buckets[index];
             return true;}
-        } else return false;
+        } else
+            {
+                System.out.println(buckets[index].data+ " "+"is already exists");
+                return false;
+            }
 
     }
 
@@ -134,24 +145,32 @@ public class Range<T> implements Set<T> {
 
         if (bucket == null) {
             throw new NoSuchElementException("No Element Found");
-
         }
 
         if (bucket.data.equals(o)) {
-            buckets[index] = bucket.next;
-            size--;
-            flag = true;
+            if (buckets[index-1]!=null && buckets[index-1].getNext()!=null && buckets[index].getData()!=null){
+                buckets[index-1].setNext(bucket.next);
+                size--;
+                flag = true;
+            }
+            else {
+                buckets[index].setNext(null);
+                buckets[index].data=null;
+                start=buckets[index+1];
+                flag=true;
+            }
         }
         return flag;
     }
 
     public boolean containsAll(Collection<?> c) {
+        boolean flag=true;
         for (Object elem : c) {
             if (!this.contains(elem)) {
-                return false;
+                flag=false;
             }
         }
-        return true;
+        return flag;
     }
 
     public boolean addAll(Collection<? extends T> c) {
@@ -163,100 +182,76 @@ public class Range<T> implements Set<T> {
     }
 
     public boolean retainAll(Collection<?> c) {
-        for (Object elem : c) {
-            if (this.contains(elem) && elem != null) {
-                this.remove(elem);
-            }
-        }
-        return false;
+        boolean changed=false;
+        Object tmp=null;
+
+       Iterator iterator=this.iterator();
+
+       while(iterator.hasNext()){
+           tmp=iterator.next();
+           if (!c.contains((tmp))){
+               remove(tmp);
+               changed=true;
+           }
+       }
+
+        return changed;
     }
 
     public boolean removeAll(Collection<?> c) {
+        int counter=0;
         for (Object elem : c) {
-            this.remove(elem);
+            if (this.contains(elem)){
+                if (this.remove(elem)){
+                    counter++;
+                }
+            }
         }
-        return false;
+        return counter>0;
     }
 
     public void clear() {
-        Node[] newBuckets = new Node[size];
-        buckets = newBuckets;
-
-    }
-
-    public String toString() {
-        return null;
-    }
-
-    static Range<Integer> of(int e1, int e2) {
-        int start = e1;
-        int end = e2;
-        int range = end - start;
-
-        Range<Integer> newRange;
-        if (range == 0) {
-            return new Range<Integer>(0);
-        } else {
-            newRange = new Range<Integer>();
-            for (int i = start; i <= end; i++) {
-                newRange.add(i);
-            }
+        while(iterator().hasNext()){
+            remove(iterator().next());
         }
-        return newRange;
+
+
     }
 
-    static Range<Float> of(float e1, float e2) {
-        float start = e1;
-        float end = e2;
-        float range = end - start;
 
-        Range<Float> newRange;
-        if (range == 0) {
-            return new Range<Float>(0);
-        } else {
-            newRange = new Range<Float>();
-            for (float i = start; i <= end; i+=0.1) {
-                newRange.add(i);
-            }
+    public static <T extends Comparable> Range<T> of(T start, T end, Function<T, T> increment){
+        Range<T> range=new Range<>();
+
+        if (start.compareTo(end)==0){
+            return range;
         }
-        return newRange;
-    }
 
-    static Range<Double> of(double e1, double e2) {
-        double start = e1;
-        double end = e2;
-        double range = end - start;
-
-        Range<Double> newRange;
-        if (range == 0) {
-            return new Range<Double>(0);
-        } else {
-            newRange = new Range<Double>();
-            for (double i = start; i <= end; i+=0.1) {
-                newRange.add(i);
-            }
+        T next = start;
+        while (next.compareTo(end) <= 0) {
+            range.add(next);
+            next = increment.apply(next);
         }
-        return newRange;
+
+        return range;
     }
 
-    static Range<Character> of(Character e1, Character e2,Function<Character,Character> function) {
-        char start = e1;
-        char end = e2;
-        int range = end - start;
+    public static Range<Float> of(Float from, Float to) {
+        return of(from, to, new Function<Float, Float>() {
 
-        Range<Character> newRange;
-        if (range == 0) {
-            return new Range<Character>(0);
-        } else {
-            newRange = new Range<Character>();
-            for (char i = start; i <= end; i++) {
-                newRange.add(i);
+            public Float apply(Float aFloat) {
+                return aFloat + 0.1f;
             }
-        }
-        return newRange;
+        });
     }
 
+    public static Range<Integer> of(Integer from, Integer to) {
+        return of(from, to, new Function<Integer, Integer>() {
 
+            public Integer apply(Integer aInteger) {
+                return aInteger + 1;
+            }
+        });
+    }
 
 
 }
