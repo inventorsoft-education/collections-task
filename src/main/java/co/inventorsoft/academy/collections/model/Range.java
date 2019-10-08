@@ -1,4 +1,5 @@
 package co.inventorsoft.academy.collections.model;
+
 import java.util.*;
 import java.util.function.Function;
 
@@ -142,45 +143,63 @@ public class Range<T> implements Set<T> {
         map.clear();
     }
 
-    static Range<Integer> of(int firstElement, int lastElement) {
-        Range<Integer> range = new Range<>();
-        if (firstElement == lastElement) {
-            return range;
-        } else {
-            int size = lastElement / firstElement;
-            int step = firstElement;
-            for (int i = 0; i < size; i++) {
-                range.add(firstElement);
-                firstElement = firstElement + step;
-            }
+//    static Range<Integer> of(int firstElement, int lastElement) {
+//        Range<Integer> range = new Range<>();
+//        if (firstElement == lastElement) {
+//            return range;
+//        } else {
+//            int size = lastElement / firstElement;
+//            int step = firstElement;
+//            for (int i = 0; i < size; i++) {
+//                range.add(firstElement);
+//                firstElement = firstElement + step;
+//            }
+//        }
+//        return range;
+//    }
+
+//    static Range<Float> of(float firstElement, float lastElement) {
+//        Function<Float, Float> floatFloatFunction = (Float param) -> {
+//            return param + 1;
+//        };
+//
+//        class FloatFunction implements Function<Float, Float> {
+//
+//            @Override
+//            public Float apply(Float param) {
+//                return param + 1;
+//            }
+//        }
+//        return of(firstElement, lastElement, floatFloatFunction);
+//        Range<Float> range = new Range<>();
+//        if (firstElement == lastElement) {
+//            return range;
+//        } else {
+//            float size = lastElement / firstElement;
+//            float step = firstElement;
+//            for (int i = 0; i < size; i++) {
+//                range.add(firstElement);
+//                firstElement = firstElement + step;
+//            }
+//        }
+//        return range;
+//    }
+
+    static <T extends Number> Range<T> of(T firstElement, T lastElement, ) {
+        Range<T> range = new Range<>();
+        range.add(firstElement);
+        while (firstElement != lastElement){
+            range.add(firstElement);
         }
         return range;
     }
 
-    static Range<Float> of(float firstElement, float lastElement) {
-        Range<Float> range = new Range<>();
-        if (firstElement == lastElement) {
-            return range;
-        } else {
-            float size = lastElement / firstElement;
-            float step = firstElement;
-            for (int i = 0; i < size; i++) {
-                range.add(firstElement);
-                firstElement = firstElement + step;
-            }
-        }
-        return range;
-    }
-
-    static Range<Character> of(char firstElement, char lastElement, Function function) {
+    static Range<Character> of(char firstElement, char lastElement, Function<Character, Character> function) {
         Range<Character> range = new Range<>();
-        if (firstElement == lastElement) {
-            return range;
-        } else {
-            int size = lastElement - firstElement;
-            for (int i = 0; i <= size; i++) {
-                range.add((char) ((int) firstElement + i));
-            }
+        range.add(firstElement);
+        while (firstElement != lastElement) {
+            firstElement = function.apply(firstElement);
+            range.add(firstElement);
         }
         return range;
     }
