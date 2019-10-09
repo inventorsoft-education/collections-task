@@ -16,20 +16,36 @@ public class Range<T extends Comparable<T>> implements Set<T> {
         }
     }
 
-    public Range (Set <T> set) {
-        Iterator <T> iter = set.iterator();
-        while (iter.hasNext())
-            this.map.put (iter.next(), Obj);
+    public Range (){
+        this.map = new HashMap<>();
     }
 
-//    public static <T extends Comparable<T>> Range <T> of(T start, T end, Function<T, T> function){
-//        Set <T> set = new HashSet();
-//        T currentValue, nextValue;
-//        function;
-//
-//
-//        return new Range(set);
-//    }
+    public static Range of (int start, int end){
+        Range range = new Range();
+        while (start <= end){
+            range.add(start);
+            start++;
+        }
+        return range;
+    }
+
+    public static Range of (float start, float end){
+        Range range = new Range();
+        while (start <= end){
+            range.add(start);
+            start += 0.1f;
+        }
+        return range;
+    }
+
+    public static <T extends Comparable<T>> Range <T> of(T start, T end, Function<T, T> function){
+        Range range = new Range();
+        while (start.compareTo(end) <= 0){
+            range.add(start);
+            start = function.apply(start);
+        }
+        return range;
+    }
 
     public int size() {
         return map.size();
@@ -73,10 +89,7 @@ public class Range<T extends Comparable<T>> implements Set<T> {
     }
 
     public Object[] toArray() {
-        Object [] array;
-        Set set = map.keySet();
-        array = set.toArray();
-        return (T[])array;
+        return map.keySet().toArray();
     }
 
     public <T1> T1[] toArray(T1[] a) {
