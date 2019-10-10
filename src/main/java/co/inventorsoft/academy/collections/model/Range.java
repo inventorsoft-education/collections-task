@@ -40,7 +40,8 @@ public class Range<T> implements Set<T> {
     }
 
     public boolean add(T t) {
-        return list.add(t);
+        return list.stream()
+                .anyMatch(element -> element.equals(t));
     }
 
     public boolean remove(Object o) {
