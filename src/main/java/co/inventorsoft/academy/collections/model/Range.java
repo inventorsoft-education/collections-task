@@ -79,7 +79,7 @@ public class Range<T> implements Set<T> {
         return range;
     }
 
-    private static <T extends Number> Range<T> of(T first, T last, Function<T, T> function) {
+    private static <T extends Comparable<? extends Number>> Range<T> of(T first, T last, Function<T, T> function) {
         Range<T> range = new Range<>();
         if (first == last) {
             return range;
@@ -87,6 +87,8 @@ public class Range<T> implements Set<T> {
             while (!first.equals(last)) {
                 range.add(first);
                 first = function.apply(first);
+                System.out.println("first = " + first);
+                System.out.println("last = " + last);
             }
             range.add(first);
             return range;
@@ -98,7 +100,10 @@ public class Range<T> implements Set<T> {
     }
 
     static Range<Float> of(float firstElement, float lastElement) {
-        return of(firstElement, lastElement, element -> (element + firstElement));
+        firstElement = (float)(Math.round(firstElement*10d)/10d);
+        lastElement = (float)(Math.round(lastElement*10d)/10d);
+        final float step = firstElement;
+        return of(firstElement, lastElement, element -> (element + step));
     }
 
     static Range<Short> of(short firstElement, short lastElement) {
@@ -110,7 +115,10 @@ public class Range<T> implements Set<T> {
     }
 
     static Range<Double> of(double firstElement, double lastElement) {
-        return of(firstElement, lastElement, element -> element + firstElement);
+        firstElement = (Math.round(firstElement*10d)/10d);
+        lastElement = (Math.round(lastElement*10d)/10d);
+        final double step = firstElement;
+        return of(firstElement, lastElement, element -> element + step);
     }
 
     static Range<Byte> of(byte firstElement, byte lastElement) {
