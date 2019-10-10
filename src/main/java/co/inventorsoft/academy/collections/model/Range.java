@@ -1,7 +1,11 @@
 package co.inventorsoft.academy.collections.model;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Range<T> implements Set<T> {
 
@@ -32,7 +36,7 @@ public class Range<T> implements Set<T> {
     }
 
     public <T1> T1[] toArray(T1[] a) {
-        return (T1[])list.toArray(a);
+        return (T1[]) list.toArray(a);
     }
 
     public boolean add(T t) {
@@ -44,7 +48,7 @@ public class Range<T> implements Set<T> {
     }
 
     public boolean containsAll(Collection<?> c) {
-       return list.containsAll(c);
+        return list.containsAll(c);
     }
 
     public boolean addAll(Collection<? extends T> c) {
@@ -56,14 +60,12 @@ public class Range<T> implements Set<T> {
     }
 
     public boolean removeAll(Collection<?> c) {
-      return list.removeAll(c);
+        return list.removeAll(c);
     }
 
     public void clear() {
         list.clear();
     }
-
-    //AtomicInteger, AtomicLong, BigDecimal, BigInteger, Byte, Double, Float, Integer, Long, Short
 
     static Range<Character> of(char firstElement, char lastElement, Function<Character, Character> function) {
         Range<Character> range = new Range<>();
@@ -75,17 +77,14 @@ public class Range<T> implements Set<T> {
         return range;
     }
 
-    static Range<Integer> of(int firstElement, int lastElement){
+    static Range<Integer> of(int firstElement, int lastElement) {
         Range<Integer> range = new Range<>();
-        int step = firstElement;
-        if(firstElement == lastElement){
+        if (firstElement == lastElement) {
             return range;
         } else {
-            while (firstElement != lastElement){
-                range.add(firstElement);
-                firstElement = firstElement + step;
-            }
-            range.add(firstElement);
+            range.addAll(Stream.iterate(firstElement, i -> i + 1)
+                    .limit(lastElement)
+                    .collect(Collectors.toList()));
             return range;
         }
     }
@@ -99,6 +98,96 @@ public class Range<T> implements Set<T> {
             while (firstElement != lastElement){
                 range.add(firstElement);
                 firstElement = firstElement + step;
+            }
+            range.add(firstElement);
+            return range;
+        }
+    }
+
+    static Range<Short> of(short firstElement, short lastElement){
+        Range<Short> range = new Range<>();
+        short step = firstElement;
+        if(firstElement == lastElement){
+            return range;
+        } else {
+            while (firstElement != lastElement){
+                range.add(firstElement);
+                firstElement = (short)(firstElement + step);
+            }
+            range.add(firstElement);
+            return range;
+        }
+    }
+
+    static Range<Long> of(long firstElement, long lastElement){
+        Range<Long> range = new Range<>();
+        long step = firstElement;
+        if(firstElement == lastElement){
+            return range;
+        } else {
+            while (firstElement != lastElement){
+                range.add(firstElement);
+                firstElement = firstElement + step;
+            }
+            range.add(firstElement);
+            return range;
+        }
+    }
+
+    static Range<Double> of(double firstElement, double lastElement){
+        Range<Double> range = new Range<>();
+        double step = firstElement;
+        if(firstElement == lastElement){
+            return range;
+        } else {
+            while (firstElement != lastElement){
+                range.add(firstElement);
+                firstElement = firstElement + step;
+            }
+            range.add(firstElement);
+            return range;
+        }
+    }
+
+    static Range<Byte> of(byte firstElement, byte lastElement){
+        Range<Byte> range = new Range<>();
+        byte step = firstElement;
+        if(firstElement == lastElement){
+            return range;
+        } else {
+            while (firstElement != lastElement){
+                range.add(firstElement);
+                firstElement = (byte)(firstElement + step);
+            }
+            range.add(firstElement);
+            return range;
+        }
+    }
+
+    static Range<BigInteger> of(BigInteger firstElement, BigInteger lastElement){
+        Range<BigInteger> range = new Range<>();
+        BigInteger step = firstElement;
+        if(firstElement == lastElement){
+            return range;
+        } else {
+            while (firstElement != lastElement){
+                range.add(firstElement);
+                firstElement = firstElement.add(step);
+            }
+            range.add(firstElement);
+            return range;
+        }
+    }
+
+    static Range<BigDecimal> of(BigDecimal firstElement, BigDecimal lastElement){
+        Range<BigDecimal> range = new Range<>();
+        BigDecimal step = firstElement;
+        if(firstElement == lastElement){
+            return range;
+        } else {
+            while (firstElement != lastElement){
+                range.add(firstElement);
+                firstElement = firstElement.add(step);
             }
             range.add(firstElement);
             return range;
