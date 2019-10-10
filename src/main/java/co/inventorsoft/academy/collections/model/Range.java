@@ -1,11 +1,15 @@
 package co.inventorsoft.academy.collections.model;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.HashMap;
 import java.util.function.Function;
 
-public class Range<T extends Comparable<T>> implements Set<T> {
+public class Range<T> implements Set<T> {
 
-    Map <T, Object> map = new HashMap<T, Object>();
+    Map<T, Object> map = new HashMap<T, Object>();
     Object Obj = new Object();
 
     public Range (T ... params) {
@@ -20,20 +24,24 @@ public class Range<T extends Comparable<T>> implements Set<T> {
         this.map = new HashMap<>();
     }
 
-    public static Range of (int start, int end){
+    public static Range of(int iteration, int end){
         Range range = new Range();
-        while (start <= end){
-            range.add(start);
-            start++;
+        int currentValue = iteration;
+        while (currentValue < end){
+            range.add(currentValue);
+            currentValue += iteration;
+            range.add(currentValue);
         }
         return range;
     }
 
-    public static Range of (float start, float end){
+    public static Range of (float iteration, float end){
         Range range = new Range();
-        while (start <= end){
-            range.add(start);
-            start += 0.1f;
+        float currentValue = iteration;
+        while (currentValue < end){
+            range.add(currentValue);
+            currentValue += iteration;
+            range.add(currentValue);
         }
         return range;
     }
@@ -80,9 +88,7 @@ public class Range<T extends Comparable<T>> implements Set<T> {
                 return null;
             }
 
-            public void remove() {
-
-            }
+            public void remove(){}
         };
 
         return it;
@@ -140,10 +146,8 @@ public class Range<T extends Comparable<T>> implements Set<T> {
     }
 
     public boolean removeAll(Collection<?> c) {
-        for (T t: map.keySet()){
-            if (c.contains(t))
-                map.remove(t);
-        }
+        for (T t: map.keySet())
+            map.remove(t);
         return true;
     }
 
