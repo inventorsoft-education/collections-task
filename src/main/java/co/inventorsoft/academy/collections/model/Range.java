@@ -148,10 +148,10 @@ public class Range<T> implements Set<T> {
         return range;
     }
 
-    public static Range<Character> of(char firstArg, char secondArg, Function<Character, Character> function) {
-        Range<Character> range = new Range<Character>();
-        if (firstArg == secondArg) return range;
-        while (firstArg <= secondArg) {
+    public static <T extends Comparable<T>> Range<T> of(T firstArg, T secondArg, Function<T, T> function) {
+        Range<T> range = new Range<T>();
+        if (firstArg.compareTo(secondArg)==0) return range;
+        while (firstArg.compareTo(secondArg)<=0) {
             firstArg=function.apply(firstArg);
             range.add(firstArg);
         }
