@@ -1,6 +1,9 @@
 package co.inventorsoft.academy.collections.model;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.HashMap;
 import java.util.function.Function;
 
 public class Range<T> implements Set<T> {
@@ -40,8 +43,7 @@ public class Range<T> implements Set<T> {
     }
 
     public <T1> T1[] toArray(T1[] a) {
-        HashSet<T> hashSet = new HashSet<T>();
-        return hashSet.toArray(a);
+        return map.keySet().toArray(a);
     }
 
     public boolean add(T t) {
@@ -63,7 +65,7 @@ public class Range<T> implements Set<T> {
     public boolean addAll(Collection<? extends T> c) {
         boolean result = false;
         for (T o : c) {
-            result = add(o);
+            if (add(o)) result = true;
         }
         return result;
     }
