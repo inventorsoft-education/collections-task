@@ -61,10 +61,11 @@ public class Range<T> implements Set<T> {
     }
 
     public boolean addAll(Collection<? extends T> c) {
+        boolean result = false;
         for (T o : c) {
-            add(o);
+            result = add(o);
         }
-        return true;
+        return result;
     }
 
     public boolean retainAll(Collection<?> c) {
@@ -145,17 +146,6 @@ public class Range<T> implements Set<T> {
             }
         });
     }
-
-
-   /* public static Range<Character> of(char firstArg, char secondArg, Function<Character, Character> function) {
-        Range<Character> range = new Range<Character>();
-        if (firstArg == secondArg) return range;
-        while (firstArg <= secondArg) {
-            firstArg = function.apply(firstArg);
-            range.add(firstArg);
-        }
-        return range;
-    }*/
 
     public static <T extends Comparable<T>> Range<T> of(T firstArg, T secondArg, Function<T, T> function) {
         Range<T> range = new Range<T>();
