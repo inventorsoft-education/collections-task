@@ -61,13 +61,10 @@ public class Range<T> implements Set<T> {
     }
 
     public boolean addAll(Collection<? extends T> c) {
-        boolean result = false;
         for (T o : c) {
-            if (add(o)) {
-                result = true;
-            }
+            add(o);
         }
-        return result;
+        return true;
     }
 
     public boolean retainAll(Collection<?> c) {
@@ -99,72 +96,78 @@ public class Range<T> implements Set<T> {
     }
 
     public static Range<Byte> of(byte firstArg, byte secondArg) {
-        Range<Byte> range = new Range<Byte>();
-        if (firstArg == secondArg) return range;
-        while (firstArg <= secondArg) {
-            range.add(firstArg);
-            firstArg++;
-        }
-        return range;
+        return of(firstArg, secondArg, new Function<Byte, Byte>() {
+            @Override
+            public Byte apply(Byte aByte) {
+                byte step = 1;
+                return aByte = (byte) (aByte + step);
+            }
+        });
     }
 
     public static Range<Short> of(short firstArg, short secondArg) {
-        Range<Short> range = new Range<Short>();
-        if (firstArg == secondArg) return range;
-        while (firstArg <= secondArg) {
-            range.add(firstArg);
-            firstArg++;
-        }
-        return range;
+
+        return of(firstArg, secondArg, new Function<Short, Short>() {
+            @Override
+            public Short apply(Short aShort) {
+                short step = 1;
+                return aShort = (short) (step + aShort);
+            }
+        });
     }
 
     public static Range<Integer> of(int firstArg, int secondArg) {
-        Range<Integer> range = new Range<Integer>();
-        if (firstArg == secondArg) return range;
-        while (firstArg <= secondArg) {
-            range.add(firstArg);
-            firstArg++;
-        }
-        return range;
+
+        return of(firstArg, secondArg, new Function<Integer, Integer>() {
+            @Override
+            public Integer apply(Integer integer) {
+                return integer += 1;
+            }
+        });
     }
 
     public static Range<Double> of(double firstArg, double secondArg) {
-        Range<Double> range = new Range<Double>();
-        if (firstArg == secondArg) return range;
-        while (firstArg <= secondArg) {
-            range.add(firstArg);
-            firstArg += 0.1;
-        }
-        return range;
+
+        return of(firstArg, secondArg, new Function<Double, Double>() {
+            @Override
+            public Double apply(Double aDouble) {
+                return aDouble += 0.1d;
+            }
+        });
     }
 
     public static Range<Float> of(float firstArg, float secondArg) {
-        Range<Float> range = new Range<Float>();
-        if (firstArg == secondArg) return range;
-        while (firstArg <= secondArg) {
-            range.add(firstArg);
-            firstArg += 0.1f;
-        }
-        return range;
+
+        return of(firstArg, secondArg, new Function<Float, Float>() {
+            @Override
+            public Float apply(Float aFloat) {
+                return aFloat += 0.1f;
+            }
+        });
     }
 
-    public static Range<Character> of(char firstArg, char secondArg, Function<Character, Character> function) {
+
+   /* public static Range<Character> of(char firstArg, char secondArg, Function<Character, Character> function) {
         Range<Character> range = new Range<Character>();
         if (firstArg == secondArg) return range;
         while (firstArg <= secondArg) {
-            firstArg=function.apply(firstArg);
+            firstArg = function.apply(firstArg);
             range.add(firstArg);
         }
         return range;
-    }
+    }*/
 
     public static <T extends Comparable<T>> Range<T> of(T firstArg, T secondArg, Function<T, T> function) {
         Range<T> range = new Range<T>();
         if (firstArg.compareTo(secondArg) == 0) return range;
         while (firstArg.compareTo(secondArg) <= 0) {
-            firstArg = function.apply(firstArg);
             range.add(firstArg);
+            firstArg = function.apply(firstArg);
+
+
         }
         return range;
     }
+
+
 }
