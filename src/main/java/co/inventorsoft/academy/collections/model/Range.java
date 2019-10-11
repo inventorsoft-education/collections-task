@@ -55,10 +55,10 @@ public class Range<T> implements Set<T> {
 
     public boolean addAll(Collection<? extends T> c) {
         boolean added = false;
-        for (T e : c){
-           if(add(e)){
-               added = true;
-           }
+        for (T e : c) {
+            if (add(e)) {
+                added = true;
+            }
         }
         return added;
     }
@@ -75,22 +75,12 @@ public class Range<T> implements Set<T> {
         list.clear();
     }
 
-    static Range<Character> of(char firstElement, char lastElement, Function<Character, Character> function) {
-        Range<Character> range = new Range<>();
-        range.add(firstElement);
-        while (firstElement != lastElement) {
-            firstElement = function.apply(firstElement);
-            range.add(firstElement);
-        }
-        return range;
-    }
-
-    private static <T extends Comparable<? extends Number>> Range<T> of(T first, T last, Function<T, T> function) {
+    static <T extends Comparable> Range<T> of(T first, T last, Function<T, T> function) {
         Range<T> range = new Range<>();
         if (first == last) {
             return range;
         } else {
-            while (!first.equals(last)) {
+            while (first.compareTo(last) < 0) {
                 range.add(first);
                 first = function.apply(first);
             }
