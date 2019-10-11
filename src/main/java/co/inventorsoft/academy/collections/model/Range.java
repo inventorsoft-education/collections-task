@@ -54,7 +54,13 @@ public class Range<T> implements Set<T> {
     }
 
     public boolean addAll(Collection<? extends T> c) {
-        return list.addAll(c);
+        boolean added = false;
+        for (T e : c){
+           if(add(e)){
+               added = true;
+           }
+        }
+        return added;
     }
 
     public boolean retainAll(Collection<?> c) {
@@ -87,8 +93,6 @@ public class Range<T> implements Set<T> {
             while (!first.equals(last)) {
                 range.add(first);
                 first = function.apply(first);
-                System.out.println("first = " + first);
-                System.out.println("last = " + last);
             }
             range.add(first);
             return range;
@@ -100,8 +104,8 @@ public class Range<T> implements Set<T> {
     }
 
     static Range<Float> of(float firstElement, float lastElement) {
-        firstElement = (float)(Math.round(firstElement*10d)/10d);
-        lastElement = (float)(Math.round(lastElement*10d)/10d);
+        firstElement = (float) (Math.round(firstElement * 10d) / 10d);
+        lastElement = (float) (Math.round(lastElement * 10d) / 10d);
         final float step = firstElement;
         return of(firstElement, lastElement, element -> (element + step));
     }
@@ -115,8 +119,8 @@ public class Range<T> implements Set<T> {
     }
 
     static Range<Double> of(double firstElement, double lastElement) {
-        firstElement = (Math.round(firstElement*10d)/10d);
-        lastElement = (Math.round(lastElement*10d)/10d);
+        firstElement = (Math.round(firstElement * 10d) / 10d);
+        lastElement = (Math.round(lastElement * 10d) / 10d);
         final double step = firstElement;
         return of(firstElement, lastElement, element -> element + step);
     }
@@ -132,4 +136,5 @@ public class Range<T> implements Set<T> {
     static Range<BigDecimal> of(BigDecimal firstElement, BigDecimal lastElement) {
         return of(firstElement, lastElement, element -> element.add(firstElement));
     }
+
 }
