@@ -24,33 +24,19 @@ public class Range<T> implements Set<T> {
         this.map = new HashMap<>();
     }
 
-    public static Range of(int iteration, int end){
-        Range range = new Range();
-        int currentValue = iteration;
-        while (currentValue < end){
-            range.add(currentValue);
-            currentValue += iteration;
-            range.add(currentValue);
-        }
-        return range;
+    public static Range of(Integer start, Integer end){
+        return Range.of(start, end, iteration -> (iteration + 1));
     }
-
-    public static Range of (float iteration, float end){
-        Range range = new Range();
-        float currentValue = iteration;
-        while (currentValue < end){
-            range.add(currentValue);
-            currentValue += iteration;
-            range.add(currentValue);
-        }
-        return range;
+    public static Range of(Float start, Float end){
+        return Range.of(start, end, iteration -> (iteration + 0.1f));
     }
 
     public static <T extends Comparable<T>> Range <T> of(T start, T end, Function<T, T> function){
         Range range = new Range();
-        while (start.compareTo(end) <= 0){
+        while (start.compareTo(end) < 0){
             range.add(start);
             start = function.apply(start);
+            range.add(start);
         }
         return range;
     }
@@ -64,10 +50,8 @@ public class Range<T> implements Set<T> {
     }
 
     public boolean contains(Object o) {
-        for (T t: map.keySet()) {
-            if (t == (T) o)
-                return true;
-        }
+        if (map.containsKey((T) o))
+            return true;
         return false;
     }
 
@@ -90,7 +74,6 @@ public class Range<T> implements Set<T> {
 
             public void remove(){}
         };
-
         return it;
     }
 
@@ -116,12 +99,7 @@ public class Range<T> implements Set<T> {
     }
 
     public boolean remove(Object o) {
-        T t = (T) o;
-        if (map.containsKey(t)) {
-            map.remove(t);
-            return true;
-        }
-        return false;
+        return map.remove((T) o) != null;
     }
 
     public boolean containsAll(Collection<?> c) {
@@ -138,17 +116,23 @@ public class Range<T> implements Set<T> {
     }
 
     public boolean retainAll(Collection<?> c) {
+        boolean result = false;
         for (T t: map.keySet()){
-            if (!c.contains(t))
+            if (!c.contains(t)) {
                 map.remove(t);
+                result = true;
+            }
         }
-        return true;
+        return result;
     }
 
     public boolean removeAll(Collection<?> c) {
-        for (T t: map.keySet())
+        boolean result = false;
+        for (T t: map.keySet()) {
             map.remove(t);
-        return true;
+            result = true;
+        }
+        return result;
     }
 
     public void clear() {
