@@ -1,5 +1,6 @@
 package co.inventorsoft.academy.collections.model;
 
+import javax.swing.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.AbstractSet;
@@ -43,11 +44,25 @@ public class Range<T> extends AbstractSet<T> implements Set<T> {
         return this.map.remove(object) == PRESENT;
     }
 
-    public static <T> Range of(T first, T second) {
-        if (first instanceof Integer) {
-            return rangeInt((Integer) first, (Integer) second);
+    public static Range of(Integer first, Integer second){
+        if (first.equals(second)) {
+            return new Range();
         }
-        return rangeFloat((Float) first, (Float) second);
+        Range<Integer> range = new Range<>();
+        IntStream.rangeClosed(first, second).forEach(range::add);
+        return range;
+    }
+
+    public static Range of(Float first, Float second){
+        Float max = Math.max(roundFloat(first), roundFloat(second));
+        Float min = Math.min(roundFloat(first), roundFloat(second));
+        Range<Float> range = new Range<>();
+        range.add(min);
+        while (!min.equals(max)) {
+            min += 0.1f;
+            range.add(min);
+        }
+        return range;
     }
 
     public static <T> Range<T> of(Character first, Character second, Function function) {
@@ -57,28 +72,6 @@ public class Range<T> extends AbstractSet<T> implements Set<T> {
         while (!temp.equals(second)) {
             temp = (Character) function.apply(temp);
             range.add(temp);
-        }
-        return range;
-    }
-
-    private static Range rangeInt(Integer first, Integer second) {
-        if (first.equals(second)) {
-            return new Range();
-        }
-        Range<Integer> range = new Range<>();
-        IntStream.rangeClosed(first, second).forEach(range::add);
-        return range;
-    }
-
-    private static Range rangeFloat(Float first, Float second) {
-
-        Float max = Math.max(roundFloat(first), roundFloat(second));
-        Float min = Math.min(roundFloat(first), roundFloat(second));
-        Range<Float> range = new Range<>();
-        range.add(min);
-        while (!min.equals(max)) {
-            min += 0.1f;
-            range.add(min);
         }
         return range;
     }
