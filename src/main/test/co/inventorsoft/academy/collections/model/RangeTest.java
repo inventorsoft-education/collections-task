@@ -59,12 +59,7 @@ public class RangeTest {
 
     @Test
     public void iteratorGeneratesCharactersForCustomType() {
-        final Range<Character> rangePoints = Range.of('a', 'd', new Function<Character, Character>() {
-            @Override
-            public Character apply(Character character) {
-                return (char) (character + 1);
-            }
-        });
+        final Range<Character> rangePoints = Range.of('a', 'd', (Function<Character, Character>) character -> (char) (character + 1));
 
         final Iterator<Character> iterator = rangePoints.iterator();
         final List<Character> expectedCharacters = Arrays.asList('a', 'b', 'c', 'd');
