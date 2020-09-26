@@ -7,6 +7,7 @@ import java.util.Set;
 public class Range<T> implements Set<T> {
 
     public int size() {
+        System.out.println("Some code");
         return 0;
     }
 
