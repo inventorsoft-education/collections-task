@@ -14,6 +14,57 @@ public class Range<T> implements Set<T> {
         range = new HashSet<T>();
     }
 
+    static <T> Range<T> of(T start, T end) {
+        Range<T> rT = new Range<>();
+        if (start.equals(end)) {
+            return rT;
+        }
+
+        if(start instanceof Integer && end instanceof Integer){
+            Range<Integer> rInt = new Range<>();
+            for(int i = (int)start; i <= (int)end; i++){
+                rInt.add(i);
+            }
+            for(Integer element: rInt){
+                rT.add((T)element);
+            }
+        }
+
+        if(start instanceof Double && end instanceof Double){
+            Range<Double> rDouble = new Range<>();
+            for(double i=(double) start; i<= (double)end; i=i+0.1){
+                rDouble.add(i);
+            }
+            for(Double element: rDouble){
+                rT.add((T)element);
+            }
+        }
+
+        if(start instanceof Float && end instanceof Float){
+            Range<Float> rFloat = new Range<>();
+            for(float i=(float) start; i<= (float)end; i=i+0.1f){
+                rFloat.add(i);
+            }
+            for(Float element: rFloat){
+                rT.add((T)element);
+            }
+        }
+
+        return rT;
+    }
+
+    static <T extends Comparable> Range<T> of(T start, T end, Function<T, T> function) {
+        Range<T> rT = new Range<>();
+        if (start.equals(end)) {
+            return rT;
+        }
+        while (start.compareTo(end)<=0) {
+            rT.add(start);
+            start = function.apply(start);
+        }
+        return rT;
+    }
+
     public int size() {
         return range.size();
     }
@@ -64,40 +115,5 @@ public class Range<T> implements Set<T> {
 
     public void clear() {
         range.clear();
-    }
-
-
-    public static Range<Integer> of( int element1, int element2){
-        Range<Integer> rInt = new Range<>();
-        if(element1 == element2){
-            return rInt;
-        }
-        for(int i=element1;i<=element2;i++){
-            rInt.add(i);
-        }
-        return rInt;
-    }
-
-    public static Range<Float> of( float element1, float element2){
-        Range<Float> rFloat = new Range<>();
-        if(element1 == element2){
-            return rFloat;
-        }
-        for(float i=element1;i<=element2;i=i+0.1f){
-            rFloat.add(i);
-        }
-        return rFloat;
-    }
-
-    static <T extends Comparable> Range<T> of(T start, T end, Function<T, T> function) {
-        Range<T> rT = new Range<>();
-        if (start.equals(end)) {
-            return rT;
-        }
-        while (start.compareTo(end)<=0) {
-            rT.add(start);
-            start = function.apply(start);
-        }
-        return rT;
     }
 }
