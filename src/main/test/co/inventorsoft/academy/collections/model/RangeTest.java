@@ -1,4 +1,4 @@
-package co.inventorsoft.academy.collections.model;
+     package co.inventorsoft.academy.collections.model;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

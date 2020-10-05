@@ -1,60 +1,126 @@
 package co.inventorsoft.academy.collections.model;
 
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 
 public class Range<T> implements Set<T> {
 
+    @Override
+    public String toString() {
+        return "Range{" +
+                "expectedElements=" + expectedElements +
+                '}';
+    }
+
+    public final List<T> expectedElements = new ArrayList<>();
+
+    public static class IntegerNextValue implements Function<Integer, Integer> {
+
+        @Override
+        public Integer apply(Integer i) {
+            return i + 1;
+        }
+    }
+
+
+    public static Range<Integer> of(Integer first, Integer last) {
+        IntegerNextValue inv = new IntegerNextValue();
+        Range<Integer> rangeOf = Range.of(first, last, inv);
+
+        return rangeOf;
+    }
+
+    public static class FloatNextValue implements Function<Float, Float> {
+        @Override
+        public Float apply(Float f) {
+            return f + 0.1f;
+        }
+    }
+
+    public static Range<Float> of(Float first, Float last) {
+        Function<Float, Float> fnv = new FloatNextValue();
+        Range<Float> floatRange = Range.of(first, last, fnv);
+
+        return floatRange;
+    }
+
+    public static <T extends Comparable<T>> Range of(T first, T last, Function<T, T> func) {
+        Range<T> tRange = new Range<>();
+        if (first.compareTo(last) < 0) {
+            T tVal = first;
+            while (tVal.compareTo(last) < 1) {
+                tRange.add(tVal);
+                System.out.println(tVal);
+                tVal = func.apply(tVal);
+            }
+        }
+
+        return tRange;
+    }
+
+
     public int size() {
-        return 0;
+        return expectedElements.size();
     }
 
     public boolean isEmpty() {
-        return false;
+        return expectedElements.isEmpty();
     }
 
     public boolean contains(Object o) {
-        return false;
+        return expectedElements.contains(o);
     }
 
     public Iterator<T> iterator() {
-        return null;
+        return expectedElements.iterator();
     }
 
     public Object[] toArray() {
-        return new Object[0];
+        return expectedElements.toArray();
     }
 
     public <T1> T1[] toArray(T1[] a) {
-        return null;
+        return expectedElements.toArray(a);
     }
 
     public boolean add(T t) {
+
+        if (!expectedElements.contains(t)) {
+            return expectedElements.add(t);
+        }
         return false;
     }
 
     public boolean remove(Object o) {
-        return false;
+        return expectedElements.remove(o);
     }
 
     public boolean containsAll(Collection<?> c) {
-        return false;
+        return expectedElements.containsAll(c);
     }
 
     public boolean addAll(Collection<? extends T> c) {
+        for (T t : expectedElements) {
+            add(t);
+        }
         return false;
     }
 
     public boolean retainAll(Collection<?> c) {
-        return false;
+        return expectedElements.retainAll(c);
     }
 
     public boolean removeAll(Collection<?> c) {
-        return false;
+        return expectedElements.removeAll(c);
     }
 
     public void clear() {
+        expectedElements.clear();
 
     }
 }
