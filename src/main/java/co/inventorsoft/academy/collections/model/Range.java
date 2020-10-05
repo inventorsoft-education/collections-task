@@ -1,6 +1,5 @@
 package co.inventorsoft.academy.collections.model;
 
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -17,7 +16,7 @@ public class Range<T> implements Set<T> {
                 '}';
     }
 
-    public final List<T> expectedElements = new ArrayList<>();
+    private final List<T> expectedElements = new ArrayList<>();
 
     public static class IntegerNextValue implements Function<Integer, Integer> {
 
@@ -30,9 +29,7 @@ public class Range<T> implements Set<T> {
 
     public static Range<Integer> of(Integer first, Integer last) {
         IntegerNextValue inv = new IntegerNextValue();
-        Range<Integer> rangeOf = Range.of(first, last, inv);
-
-        return rangeOf;
+        return Range.of(first, last, inv);
     }
 
     public static class FloatNextValue implements Function<Float, Float> {
@@ -44,9 +41,8 @@ public class Range<T> implements Set<T> {
 
     public static Range<Float> of(Float first, Float last) {
         Function<Float, Float> fnv = new FloatNextValue();
-        Range<Float> floatRange = Range.of(first, last, fnv);
 
-        return floatRange;
+        return Range.of(first, last, fnv);
     }
 
     public static <T extends Comparable<T>> Range of(T first, T last, Function<T, T> func) {
@@ -55,14 +51,12 @@ public class Range<T> implements Set<T> {
             T tVal = first;
             while (tVal.compareTo(last) < 1) {
                 tRange.add(tVal);
-                System.out.println(tVal);
                 tVal = func.apply(tVal);
             }
         }
 
         return tRange;
     }
-
 
     public int size() {
         return expectedElements.size();
@@ -121,6 +115,5 @@ public class Range<T> implements Set<T> {
 
     public void clear() {
         expectedElements.clear();
-
     }
 }
