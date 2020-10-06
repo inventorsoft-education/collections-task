@@ -26,7 +26,6 @@ public class Range<T> implements Set<T> {
         }
     }
 
-
     public static Range<Integer> of(Integer first, Integer last) {
         IntegerNextValue inv = new IntegerNextValue();
         return Range.of(first, last, inv);
@@ -54,7 +53,6 @@ public class Range<T> implements Set<T> {
                 tVal = func.apply(tVal);
             }
         }
-
         return tRange;
     }
 
