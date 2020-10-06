@@ -10,48 +10,31 @@ public class Range<T> implements Set<T> {
 
     private HashSet<T> range;
 
-    public Range(){
+    private Range(){
         range = new HashSet<T>();
     }
 
-    static <T> Range<T> of(T start, T end) {
-        Range<T> rT = new Range<>();
-        if (start.equals(end)) {
-            return rT;
+         static Range<Integer> of(int start, int end){
+            Range<Integer> rInt = Range.of(start, end, new Function<Integer, Integer>() {
+                @Override
+                public Integer apply(Integer integer) {
+                    return (integer +1);
+                }
+            });
+                    return rInt;
         }
 
-        if(start instanceof Integer && end instanceof Integer){
-            Range<Integer> rInt = new Range<>();
-            for(int i = (int)start; i <= (int)end; i++){
-                rInt.add(i);
+         static Range<Float> of(float start, float end){
+        Range<Float> rFloat = Range.of(start, end, new Function<Float, Float>() {
+            @Override
+            public Float apply(Float aFloat) {
+                return (aFloat+0.1f);
             }
-            for(Integer element: rInt){
-                rT.add((T)element);
-            }
-        }
+        });
+                    return rFloat;
 
-        if(start instanceof Double && end instanceof Double){
-            Range<Double> rDouble = new Range<>();
-            for(double i=(double) start; i<= (double)end; i=i+0.1){
-                rDouble.add(i);
-            }
-            for(Double element: rDouble){
-                rT.add((T)element);
-            }
-        }
-
-        if(start instanceof Float && end instanceof Float){
-            Range<Float> rFloat = new Range<>();
-            for(float i=(float) start; i<= (float)end; i=i+0.1f){
-                rFloat.add(i);
-            }
-            for(Float element: rFloat){
-                rT.add((T)element);
-            }
-        }
-
-        return rT;
     }
+
 
     static <T extends Comparable> Range<T> of(T start, T end, Function<T, T> function) {
         Range<T> rT = new Range<>();
