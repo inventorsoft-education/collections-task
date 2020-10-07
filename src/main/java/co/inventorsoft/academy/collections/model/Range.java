@@ -10,38 +10,24 @@ public class Range<T> implements Set<T> {
 
     private HashSet<T> range;
 
-    private Range(){
-        range = new HashSet<T>();
+    private Range() {
+        range = new HashSet<>();
     }
 
-         static Range<Integer> of(int start, int end){
-            Range<Integer> rInt = Range.of(start, end, new Function<Integer, Integer>() {
-                @Override
-                public Integer apply(Integer integer) {
-                    return (integer +1);
-                }
-            });
-                    return rInt;
-        }
-
-         static Range<Float> of(float start, float end){
-        Range<Float> rFloat = Range.of(start, end, new Function<Float, Float>() {
-            @Override
-            public Float apply(Float aFloat) {
-                return (aFloat+0.1f);
-            }
-        });
-                    return rFloat;
-
+    public static Range<Integer> of(int start, int end) {
+        return Range.of(start, end, integer -> integer + 1);
     }
 
+    public static Range<Float> of(float start, float end) {
+        return Range.of(start, end, aFloat -> aFloat + 0.1f);
+    }
 
     static <T extends Comparable> Range<T> of(T start, T end, Function<T, T> function) {
         Range<T> rT = new Range<>();
         if (start.equals(end)) {
             return rT;
         }
-        while (start.compareTo(end)<=0) {
+        while (start.compareTo(end) <= 0) {
             rT.add(start);
             start = function.apply(start);
         }
@@ -69,7 +55,7 @@ public class Range<T> implements Set<T> {
     }
 
     public <T1> T1[] toArray(T1[] a) {
-        return (T1[]) range.toArray(a);
+        return range.toArray(a);
     }
 
     public boolean add(T t) {
