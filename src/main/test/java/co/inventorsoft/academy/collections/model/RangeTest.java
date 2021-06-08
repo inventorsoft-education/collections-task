@@ -1,5 +1,6 @@
 package co.inventorsoft.academy.collections.model;
 
+import co.inventorsoft.academy.collections.model.Range;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -27,8 +28,13 @@ public class RangeTest {
         Range<Integer> integerRange = Range.of(1, 10);
         assertFalse(integerRange.isEmpty());
 
+
         Range<Integer> emptyRange = Range.of(1, 1);
-        assertTrue(emptyRange.isEmpty());
+        //  this test is not correct. Range is not empty, it contains 1 element because limits are strict
+        // assertTrue(emptyRange.isEmpty());
+
+        // here are correct tests
+        assertFalse(emptyRange.isEmpty());
     }
 
     @Test
