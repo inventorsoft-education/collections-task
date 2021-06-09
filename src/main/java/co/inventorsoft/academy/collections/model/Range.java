@@ -47,7 +47,7 @@ public class Range<T extends Comparable<T>> implements Set<T> {
         return this.size;
     }
     public boolean isEmpty() {
-        return this.size == 0;
+        return this.size() == 0;
     }
 
     /**
@@ -87,8 +87,8 @@ public class Range<T extends Comparable<T>> implements Set<T> {
      */
     public Object[] toArray() {
         Iterator<T> iterator = this.iterator();
-        Object[] array = new Object[this.size];
-        for (int i = 0; i < size; i++) {
+        Object[] array = new Object[this.size()];
+        for (int i = 0; i < this.size(); i++) {
             array[i] = iterator.next();
         }
         return array;
@@ -100,11 +100,11 @@ public class Range<T extends Comparable<T>> implements Set<T> {
      * @return that array
      */
     public <T1> T1[] toArray(T1[] array) {
-        if (array.length != this.size) {
+        if (array.length != this.size()) {
             throw new ArrayStoreException();
         }
         Iterator<T1> iterator = (Iterator<T1>) this.iterator();
-        for (int i = 0; i < this.size; i++) {
+        for (int i = 0; i < this.size(); i++) {
             array[i] = iterator.next();
         }
         return array;
