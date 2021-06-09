@@ -10,18 +10,14 @@ public class Range<T extends Comparable<T>> implements Set<T> {
     private final T last;
     private final Function<T, T> increment;
 
-    private final int size;
+    private int size;
 
     private Range(T first, T last, Function<T, T> increment) {
         this.first = first;
         this.last = last;
         this.increment = increment;
 
-        int size = 0;
-        for (T ignored : this) {
-            size++;
-        }
-        this.size = size;
+        this.size = -1;
     }
 
     public static Range<Integer> of(int first, int last) {
@@ -41,6 +37,13 @@ public class Range<T extends Comparable<T>> implements Set<T> {
     }
 
     public int size() {
+        if (this.size == -1) {
+            int tempSize = 0;
+            for (T ignored : this) {
+                tempSize++;
+            }
+            this.size = tempSize;
+        }
         return this.size;
     }
     public boolean isEmpty() {
