@@ -2,21 +2,15 @@ package main.java.co.inventorsoft.academy.collections.model;
 
 import java.util.*;
 import java.util.function.Function;
-import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
 
 public class Range<T> implements Set<T> {
-    private List<T> arrayList = new ArrayList<>();
-    private static List<Integer> integerList = new ArrayList<>();
-    private static List<Float> floatList = new ArrayList<>();
-    private static List<Character> characterList = new ArrayList<>();
-    private static List<Double> doubleList = new ArrayList<>();
+    private static List<Object> arrayList = new ArrayList<>();
 
     public Range() {
-
+        this.arrayList = arrayList;
     }
 
-    public Range(List<T> arrayList) {
+    public Range(List<Object> arrayList) {
         this.arrayList = arrayList;
     }
 
@@ -34,7 +28,7 @@ public class Range<T> implements Set<T> {
     }
 
     public Iterator<T> iterator() {
-        return arrayList.iterator();
+        return (Iterator<T>) arrayList.iterator();
     }
 
     public Object[] toArray() {
@@ -46,7 +40,11 @@ public class Range<T> implements Set<T> {
     }
 
     public boolean add(T t) {
-        return arrayList.add(t);
+        if (!arrayList.contains(t)) {
+            return arrayList.add(t);
+        } else {
+            return false;
+        }
     }
 
     public boolean remove(Object o) {
@@ -58,7 +56,16 @@ public class Range<T> implements Set<T> {
     }
 
     public boolean addAll(Collection<? extends T> c) {
-        return arrayList.addAll(c);
+        Object[] objects = c.toArray();
+        boolean containElement = false;
+        for (int i = 0; i < objects.length; i++) {
+            if (!arrayList.contains(objects[i])) {
+                arrayList.add(objects[i]);
+                containElement = true;
+            }
+            containElement = false;
+        }
+        return containElement;
     }
 
     public boolean retainAll(Collection<?> c) {
@@ -74,45 +81,45 @@ public class Range<T> implements Set<T> {
     }
 
     public static Range<Integer> of(int i, int i1) {
-        integerList.clear();
+        arrayList.clear();
         if (i < i1) {
             for (int j = i; j <= i1; j++) {
-                integerList.add(j);
+                arrayList.add(j);
             }
         }
-        return new Range<>(integerList);
+        return new Range<>();
     }
 
     public static Range<Float> of(float i, float i1) {
-        floatList.clear();
+        arrayList.clear();
         if (i < i1) {
             for (float j = i; j <= i1; j = j + 0.1f) {
-                floatList.add(j);
+                arrayList.add(j);
             }
         }
-        return new Range<>(floatList);
+        return new Range<>();
     }
 
     public static Range<Double> of(double i, double i1) {
-        doubleList.clear();
+        arrayList.clear();
         if (i < i1) {
             for (double j = i; j <= i1; j = j + 0.1) {
-                doubleList.add(j);
+                arrayList.add(j);
             }
         }
-        return new Range<>(doubleList);
+        return new Range<>(arrayList);
     }
 
 
     public static Range<Character> of(char a, char d, Function<Character, Character> characterCharacterFunction) {
-        characterList.clear();
-        characterList.add(new Character(a));
+        arrayList.clear();
+        arrayList.add(new Character(a));
         Character next = characterCharacterFunction.apply(a);
         while (!next.equals(new Character(d))) {
-            characterList.add(next);
+            arrayList.add(next);
             next = characterCharacterFunction.apply(next.charValue());
         }
-        characterList.add(new Character(d));
-        return new Range<>(characterList);
+        arrayList.add(new Character(d));
+        return new Range<>();
     }
 }
