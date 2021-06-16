@@ -83,39 +83,23 @@ public class Range<T> implements Set<T> {
     }
 
     public static Range<Integer> of(int i, int i1) {
-        // arrayList.clear();
-        Range<Integer> integers = new Range<>();
-        if (i < i1) {
-            for (int j = i; j <= i1; j++) {
-                integers.add(j);
-            }
-        }
-        return integers;
+        return Range.of(i, i1, function -> function + 1);
     }
 
     public static Range<Float> of(float i, float i1) {
-        Range<Float> floats = new Range<>();
-        if (i < i1) {
-            for (float j = i; j <= i1; j = j + 0.1f) {
-                floats.add(j);
-            }
-        }
-        return floats;
+        return Range.of(i, i1, function -> function + 0.1f);
     }
 
     public static Range<Double> of(double i, double i1) {
-        Range<Double> doubles = new Range<>();
-        if (i < i1) {
-            for (double j = i; j <= i1; j++) {
-                doubles.add(j);
-            }
-        }
-        return doubles;
+        return Range.of(i, i1, function -> function + 0.1);
 
     }
 
     public static <T extends Comparable<T>> Range<T> of(T startRange, T endRange, Function<T, T> tFunction) {
         Range<T> range = new Range<>();
+        if (startRange.compareTo(endRange) == 0) {
+            return range;
+        }
         range.add(startRange);
         T next = tFunction.apply(startRange);
         while (next.compareTo(endRange) != 0) {
@@ -128,15 +112,4 @@ public class Range<T> implements Set<T> {
     }
 
 
-   /* public static Range<Character> of(char a, char d, Function<Character, Character> characterCharacterFunction) {
-        Range<Character> characters = new Range<>();
-        characters.add(new Character(a));
-        Character next = characterCharacterFunction.apply(a);
-        while (!next.equals(new Character(d))) {
-            characters.add(next);
-            next = characterCharacterFunction.apply(next.charValue());
-        }
-        characters.add(new Character(d));
-        return characters;
-    }*/
 }
