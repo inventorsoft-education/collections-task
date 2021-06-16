@@ -1,16 +1,18 @@
 package main.java.co.inventorsoft.academy.collections.model;
 
-import java.util.*;
+
+;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.Iterator;
+import java.util.Collection;
 import java.util.function.Function;
 
 public class Range<T> implements Set<T> {
-    private static List<Object> arrayList = new ArrayList<>();
+    private List<T> arrayList = new ArrayList<>();
 
     public Range() {
-        this.arrayList = arrayList;
-    }
-
-    public Range(List<Object> arrayList) {
         this.arrayList = arrayList;
     }
 
@@ -60,7 +62,7 @@ public class Range<T> implements Set<T> {
         boolean containElement = false;
         for (int i = 0; i < objects.length; i++) {
             if (!arrayList.contains(objects[i])) {
-                arrayList.add(objects[i]);
+                arrayList.add((T) objects[i]);
                 containElement = true;
             }
             containElement = false;
@@ -81,45 +83,60 @@ public class Range<T> implements Set<T> {
     }
 
     public static Range<Integer> of(int i, int i1) {
-        arrayList.clear();
+        // arrayList.clear();
+        Range<Integer> integers = new Range<>();
         if (i < i1) {
             for (int j = i; j <= i1; j++) {
-                arrayList.add(j);
+                integers.add(j);
             }
         }
-        return new Range<>();
+        return integers;
     }
 
     public static Range<Float> of(float i, float i1) {
-        arrayList.clear();
+        Range<Float> floats = new Range<>();
         if (i < i1) {
             for (float j = i; j <= i1; j = j + 0.1f) {
-                arrayList.add(j);
+                floats.add(j);
             }
         }
-        return new Range<>();
+        return floats;
     }
 
     public static Range<Double> of(double i, double i1) {
-        arrayList.clear();
+        Range<Double> doubles = new Range<>();
         if (i < i1) {
-            for (double j = i; j <= i1; j = j + 0.1) {
-                arrayList.add(j);
+            for (double j = i; j <= i1; j++) {
+                doubles.add(j);
             }
         }
-        return new Range<>(arrayList);
+        return doubles;
+
+    }
+
+    public static <T extends Comparable<T>> Range<T> of(T startRange, T endRange, Function<T, T> tFunction) {
+        Range<T> range = new Range<>();
+        range.add(startRange);
+        T next = tFunction.apply(startRange);
+        while (next.compareTo(endRange) != 0) {
+            range.add(next);
+            next = tFunction.apply(next);
+        }
+        range.add(endRange);
+        return range;
+
     }
 
 
-    public static Range<Character> of(char a, char d, Function<Character, Character> characterCharacterFunction) {
-        arrayList.clear();
-        arrayList.add(new Character(a));
+   /* public static Range<Character> of(char a, char d, Function<Character, Character> characterCharacterFunction) {
+        Range<Character> characters = new Range<>();
+        characters.add(new Character(a));
         Character next = characterCharacterFunction.apply(a);
         while (!next.equals(new Character(d))) {
-            arrayList.add(next);
+            characters.add(next);
             next = characterCharacterFunction.apply(next.charValue());
         }
-        arrayList.add(new Character(d));
-        return new Range<>();
-    }
+        characters.add(new Character(d));
+        return characters;
+    }*/
 }

@@ -51,6 +51,7 @@ public class RangeTest {
     @Test
     public void iteratorGeneratesIntegersIn01Step() {
         Range<Float> doubleRange = Range.of(0.1f, 0.5f);
+
         final List<Float> expectedElements = Arrays.asList(0.1f, 0.2f, 0.3f, 0.4f, 0.5f);
         assertEquals(5, doubleRange.size());
         for (Float number : doubleRange) {
