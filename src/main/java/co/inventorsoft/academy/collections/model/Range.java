@@ -1,10 +1,18 @@
-package co.inventorsoft.academy.collections.model;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-import java.util.*;
+public class Range<T> implements Set<T>, Comparable {
 
-public class Range<T> implements Set<T> {
+    private static List mainList = new ArrayList();
 
-    private static List  mainList = new ArrayList();
+    public static Range<Character> of(char a, char d, Function<Character, Character> characterCharacterFunction) {
+        return new Range<>();
+    }
 
     public int size() {
         return mainList.size();
@@ -31,7 +39,11 @@ public class Range<T> implements Set<T> {
     }
 
     public boolean add(T t) {
-        return mainList.add(t);
+        if (mainList.contains(t) == true) {
+            return false;
+        } else {
+            return mainList.add(t);
+        }
     }
 
     public boolean remove(Object o) {
@@ -43,7 +55,14 @@ public class Range<T> implements Set<T> {
     }
 
     public boolean addAll(Collection<? extends T> c) {
-        return mainList.addAll(c);
+        c = c.stream()
+                .distinct()
+                .collect(Collectors.toList());
+        if (mainList.containsAll(c) == true) {
+            return false;
+        } else {
+            return mainList.addAll(c);
+        }
     }
 
     public boolean retainAll(Collection<?> c) {
@@ -57,11 +76,11 @@ public class Range<T> implements Set<T> {
     public void clear() {
         mainList.clear();
     }
-    public static Range of(int startList, int endList){
+
+    public static Range of(int startList, int endList) {
         mainList.clear();
         if (startList != endList) {
-            for (int i=startList; i<=endList; i++)
-            {
+            for (int i = startList; i <= endList; i++) {
                 mainList.add(i);
             }
         }
@@ -69,15 +88,29 @@ public class Range<T> implements Set<T> {
 
     }
 
-    public static Range of(float startList, float endList){
+    public static Range of(float startList, float endList) {
         mainList.clear();
         if (startList != endList) {
-            for (float i=startList; i<=endList; i =i+0.1f)
-            {
+            for (float i = startList; i <= endList; i = i + 0.1f) {
                 mainList.add(i);
             }
         }
         return new Range();
+    }
+
+    public static Range of(char startList, char endList) {
+        mainList.clear();
+        return new Range();
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return 1;
+    }
+
+    @Override
+    public String toString() {
+        return mainList.toString();
     }
 
 }
