@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class Range<T> implements Set<T>, Comparable {
+public class Range<T> implements Set<T> {
 
     private static List mainList = new ArrayList();
 
@@ -39,7 +39,7 @@ public class Range<T> implements Set<T>, Comparable {
     }
 
     public boolean add(T t) {
-        if (mainList.contains(t) == true) {
+        if (mainList.contains(t)) {
             return false;
         } else {
             return mainList.add(t);
@@ -58,7 +58,7 @@ public class Range<T> implements Set<T>, Comparable {
         c = c.stream()
                 .distinct()
                 .collect(Collectors.toList());
-        if (mainList.containsAll(c) == true) {
+        if (mainList.containsAll(c)) {
             return false;
         } else {
             return mainList.addAll(c);
@@ -101,11 +101,6 @@ public class Range<T> implements Set<T>, Comparable {
     public static Range of(char startList, char endList) {
         mainList.clear();
         return new Range();
-    }
-
-    @Override
-    public int compareTo(Object o) {
-        return 1;
     }
 
     @Override
