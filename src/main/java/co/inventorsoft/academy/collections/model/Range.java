@@ -10,66 +10,53 @@ import java.util.function.Function;
 public class Range<T> implements Set<T> {
 
 
-    public List<T> MyList = new ArrayList<>();
+    public List<T> myList = new ArrayList<>();
 
     public int size() {
-        return MyList.size();
+        return myList.size();
     }
 
     public boolean isEmpty() {
-        return MyList.isEmpty();
+        return myList.isEmpty();
     }
 
     public boolean contains(Object o) {
-        return MyList.contains(o);
+        return myList.contains(o);
     }
 
     public Iterator<T> iterator() {
-        return MyList.iterator();
+        return myList.iterator();
     }
 
     public Object[] toArray() {
-        return MyList.toArray();
+        return myList.toArray();
     }
 
     public <T1> T1[] toArray(T1[] a) {
-        return MyList.toArray(a);
+        return myList.toArray(a);
     }
 
     public boolean add(T t) {
 
-        if (!MyList.contains(t)) {
-            return MyList.add(t);
+        if (!myList.contains(t)) {
+            return myList.add(t);
         }
         return false;
     }
 
     public boolean remove(Object o) {
-        return MyList.remove(o);
+        return myList.remove(o);
     }
 
     public boolean containsAll(Collection<?> c) {
-        return MyList.containsAll(c);
+        return myList.containsAll(c);
     }
 
     public boolean addAll(Collection<? extends T> c) {
-        for (T t : MyList) {
+        for (T t : myList) {
             add(t);
         }
         return false;
-    }
-
-    public boolean retainAll(Collection<?> c) {
-        return MyList.retainAll(c);
-    }
-
-    public boolean removeAll(Collection<?> c) {
-        return MyList.removeAll(c);
-    }
-
-    public void clear() {
-        MyList.clear();
-
     }
 
     public static class MyInteger implements Function<Integer, Integer> {
