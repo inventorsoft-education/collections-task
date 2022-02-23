@@ -4,15 +4,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class Range<T> implements Set<T> {
 
-    private static List mainList = new ArrayList();
-
-    public static Range<Character> of(char a, char d, Function<Character, Character> characterCharacterFunction) {
-        return new Range<>();
-    }
+    private List<T> mainList = new ArrayList();
 
     public int size() {
         return mainList.size();
@@ -31,11 +26,23 @@ public class Range<T> implements Set<T> {
     }
 
     public Object[] toArray() {
-        return mainList.toArray();
+        Object[] objects = new Object[size()];
+        int index = 0;
+        for (Object current : mainList) {
+            objects[index] = current;
+            index++;
+        }
+        return objects;
     }
 
     public <T1> T1[] toArray(T1[] a) {
-        return null;
+        int index = 0;
+        for (T current : mainList) {
+            a[index] = (T1) current;
+            index++;
+        }
+        ;
+        return a;
     }
 
     public boolean add(T t) {
@@ -55,13 +62,15 @@ public class Range<T> implements Set<T> {
     }
 
     public boolean addAll(Collection<? extends T> c) {
-        c = c.stream()
-                .distinct()
-                .collect(Collectors.toList());
-        if (mainList.containsAll(c)) {
+        if (c.isEmpty()) {
             return false;
         } else {
-            return mainList.addAll(c);
+            for (T iter : c) {
+                if (!mainList.contains(iter)) {
+                    mainList.add(iter);
+                }
+            }
+            return true;
         }
     }
 
@@ -77,30 +86,13 @@ public class Range<T> implements Set<T> {
         mainList.clear();
     }
 
-    public static Range of(int startList, int endList) {
-        mainList.clear();
-        if (startList != endList) {
-            for (int i = startList; i <= endList; i++) {
-                mainList.add(i);
-            }
+    public static class MyInteger implements Function<Integer, Integer> {
+
+        @Override
+        public Integer apply(Integer y) {
+            return y + 1;
         }
-        return new Range();
 
-    }
-
-    public static Range of(float startList, float endList) {
-        mainList.clear();
-        if (startList != endList) {
-            for (float i = startList; i <= endList; i = i + 0.1f) {
-                mainList.add(i);
-            }
-        }
-        return new Range();
-    }
-
-    public static Range of(char startList, char endList) {
-        mainList.clear();
-        return new Range();
     }
 
     @Override
