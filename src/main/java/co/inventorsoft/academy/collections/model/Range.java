@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 
+
 public class Range<T> implements Set<T> {
 
 
@@ -59,6 +60,18 @@ public class Range<T> implements Set<T> {
         return false;
     }
 
+    public boolean retainAll(Collection<?> c) {
+        return myList.retainAll(c);
+    }
+
+    public boolean removeAll(Collection<?> c) {
+        return myList.removeAll(c);
+    }
+
+    public void clear() {
+        myList.clear();
+
+    }
     public static class MyInteger implements Function<Integer, Integer> {
 
         @Override
