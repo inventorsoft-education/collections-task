@@ -41,7 +41,6 @@ public class Range<T> implements Set<T> {
             a[index] = (T1) current;
             index++;
         }
-        ;
         return a;
     }
 
@@ -86,13 +85,23 @@ public class Range<T> implements Set<T> {
         mainList.clear();
     }
 
-    public static class MyInteger implements Function<Integer, Integer> {
+    public static Range<Integer> of(Integer startList, Integer endList) {
+        return (Range<Integer>) Range.of(startList, endList, integer -> integer + 1);
+    }
 
-        @Override
-        public Integer apply(Integer y) {
-            return y + 1;
+    public static Range<Float> of(Float startList, Float endList) {
+        return (Range<Float>) Range.of(startList, endList, aFloat -> aFloat + 0.1f);
+    }
+
+    public static <T extends Comparable<T>> Range of(T startList, T endList, Function<T, T> range) {
+        Range<T> arr = new Range<>();
+        if (startList.compareTo(endList) < 0) {
+            while (startList.compareTo(endList) < 1) {
+                arr.add(startList);
+                startList = range.apply(startList);
+            }
         }
-
+        return arr;
     }
 
     @Override
@@ -101,3 +110,6 @@ public class Range<T> implements Set<T> {
     }
 
 }
+
+
+
