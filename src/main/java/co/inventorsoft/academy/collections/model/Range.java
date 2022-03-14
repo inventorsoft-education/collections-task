@@ -5,108 +5,134 @@ import java.util.function.Function;
 
 public class Range<T> implements Set<T> {
 
-    public List<T> myList = new ArrayList<>();
+    List mylist = new ArrayList();
+
+    public static void main(String[] args) {
+//        Range a = Range.of(1, 10);
+//        a.test();
+//        System.out.println("size "+a.size());
+//        System.out.println("is empty?" + a.isEmpty());
+//        System.out.println(a.add(0.2f));
+//        System.out.println(a.contains(5));
+//        a.test();
+    }
+
+    public Range(float a, float b) {
+        if(!(a==b)){
+            while (a <=b) {
+                mylist.add(a);
+                a = a + 0.1f;
+                a = a * 10;
+                a = Math.round(a);
+                a = a / 10;
+
+            }}
+    }
+
+    public Range(int a, int b) {
+        if (!(a==b)){
+            while (a <= b) {
+                mylist.add(a);
+                a = a + 1;
+            }}
+
+    }
+
+    public static Range of(int i, int i1) {
+        return new Range(i, i1);
+    }
+
+    public static Range of(float i, float i1) {
+        return new Range(i, i1);
+    }
+
+    public static Range of(char i, char i1) {
+        return new Range(i, i1);
+    }
+
+    public static Range<Character> of(char a, char d, Function<Character, Character> characterCharacterFunction) {
+        return null;
+    }
 
     public int size() {
-        return myList.size();
+        return mylist.size();
     }
 
     public boolean isEmpty() {
-        return myList.isEmpty();
+        return mylist.isEmpty();
     }
 
+    @Override
     public boolean contains(Object o) {
-        return myList.contains(o);
+        return mylist.contains(o);
     }
 
-    public Iterator<T> iterator() {
-        return myList.iterator();
+    @Override
+    public Iterator iterator() {
+        return mylist.iterator();
     }
 
+    @Override
     public Object[] toArray() {
-        return myList.toArray();
+        return new Object[0];
     }
 
-    public <T1> T1[] toArray(T1[] a) {
-        return myList.toArray(a);
+    @Override
+    public boolean add(Object o) {
+        return mylist.add(o);
     }
 
-    public boolean add(T t) {
-
-        if (!myList.contains(t)) {
-            return myList.add(t);
-        }
-        return false;
-    }
-
+    @Override
     public boolean remove(Object o) {
-        return myList.remove(o);
+        return mylist.remove(o);
     }
 
-    public boolean containsAll(Collection<?> c) {
-        return myList.containsAll(c);
+    @Override
+    public boolean addAll(Collection c) {
+        return mylist.addAll(c);
     }
 
-    public boolean addAll(Collection<? extends T> c) {
-        for (T t : myList) {
-            add(t);
-        }
-        return false;
-    }
-
-    public boolean retainAll(Collection<?> c) {
-        return myList.retainAll(c);
-    }
-
-    public boolean removeAll(Collection<?> c) {
-        return myList.removeAll(c);
-    }
-
+    @Override
     public void clear() {
-        myList.clear();
-
+        mylist.clear();
     }
-    public static class MyInteger implements Function<Integer, Integer> {
 
-        @Override
-        public Integer apply (Integer y) {
-            return y + 1;
+    @Override
+    public boolean removeAll(Collection c) {
+        return mylist.removeAll(c);
+    }
+
+    @Override
+    public boolean retainAll(Collection c) {
+
+        return mylist.retainAll(c);
+    }
+
+    @Override
+    public boolean containsAll(Collection c) {
+
+        return mylist.containsAll(c);
+    }
+
+    @Override
+    public Object[] toArray(Object[] a) {
+        return new Object[0];
+    }
+
+    public boolean contains(float o) {
+        return mylist.contains(o);
+    }
+    public boolean contains(int o) {
+        return mylist.contains(o);
+    }
+
+    public boolean add(Float Float) {
+        return mylist.add(Float);
+    }
+
+    public void test() {
+        for (int i = 0; i < 1; i++) {
+            System.out.println("It my list" + mylist.toString());
         }
-
-    }
-    public static Range<Integer> of(Integer first, Integer last) {
-        MyInteger isA = new MyInteger();
-        Range<Integer> intRange = Range.of(first, last, isA);
-
-        return intRange;
-    }
-
-
-    public static class MyFloat implements Function<Float, Float> {
-
-        @Override
-        public Float apply(Float f) {
-            return f + 0.1f;
-        }
-    }
-    public static Range<Float> of(Float first, Float last) {
-        Function<Float, Float> flt = new MyFloat();
-        Range<Float> floatRange = Range.of(first, last, flt);
-
-        return floatRange;
-    }
-
-    public static <T extends Comparable<T>> Range of(T first, T last, Function<T, T> rng) {
-        Range<T> elementR = new Range<>();
-        if (first.compareTo(last) < 0) {
-            T valueR = first;
-            while (valueR.compareTo(last) < 1) {
-                elementR.add(valueR);
-                System.out.println(valueR);
-                valueR = rng.apply(valueR);
-            }
-        }
-
-        return elementR;
     }
 }
