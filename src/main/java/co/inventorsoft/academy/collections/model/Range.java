@@ -1,6 +1,10 @@
 package co.inventorsoft.academy.collections.model;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
 
 
@@ -99,13 +103,13 @@ public class Range<T> implements Set<T> {
 
 Range(){}
 
-    public static   <T extends Comparable<T>> Range of(T a, T b, Function<T, T> rng) {
+    public static   <T extends Comparable<T>> Range of(T a, T b, Function<T, T> rg) {
         Range<T> elem = new Range<>();
         if (a.compareTo(b) < 0) {
             T value = a;
             while (value.compareTo(b) < 1) {
                 elem.add(value);
-                value = rng.apply(value);
+                value = rg.apply(value);
             }
         }
         return elem;
