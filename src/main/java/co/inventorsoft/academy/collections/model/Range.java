@@ -10,34 +10,24 @@ import java.util.function.Function;
 
 public class Range<T> implements Set<T> {
 
-    List<T> mylist  = new ArrayList();
+    List<T> mylist = new ArrayList();
 
-
-    public Range(float a, float b) {
-        if(!(a==b)){
-            while (a <=b) {
-                mylist.add((T)(Float) a);
-                a = a + 0.1f;
-            }}
+    Range() {
     }
-
-    public Range(int a, int b) {
-        if (!(a==b)){
-            while (a <= b) {
-                mylist.add((T)(Integer)a);
-                a = a + 1;
-            }}
-
-    }
-
 
     public static Range of(int i, int i1) {
-        return new Range(i, i1);
+
+        Range<Integer> intRange = Range.of(i, i1, i2 -> (int) (i2 + 1));
+        return intRange;
     }
 
     public static Range of(float i, float i1) {
-        return new Range(i, i1);
+        Range<Float> floatRange = Range.of(i, i1, i2 -> (float) (i2 + 0.1));
+        return floatRange;
+
     }
+
+
     public int size() {
         return mylist.size();
     }
@@ -67,7 +57,10 @@ public class Range<T> implements Set<T> {
     }
 
     public boolean addAll(Collection<? extends T> c) {
-        for (T t : mylist) {add(t);}return false;
+        for (T t : mylist) {
+            return add(t);
+        }
+        return false;
     }
 
     @Override
@@ -88,22 +81,26 @@ public class Range<T> implements Set<T> {
 
     @Override
     public boolean containsAll(Collection<?> c) {
+
         return mylist.containsAll(c);
     }
 
     @Override
     public <T1> T1[] toArray(T1[] o) {
+
         return mylist.toArray(o);
     }
 
 
+    public boolean add(T t) {
+        if (!mylist.contains(t)) {
+            return mylist.add(t);
+        }
+        return false;
+    }
 
-    public boolean add(T t) {if (!mylist.contains(t)) {return mylist.add(t);}return false;}
 
-
-Range(){}
-
-    public static   <T extends Comparable<T>> Range of(T a, T b, Function<T, T> rg) {
+    public static <T extends Comparable<T>> Range of(T a, T b, Function<T, T> rg) {
         Range<T> elem = new Range<>();
         if (a.compareTo(b) < 0) {
             T value = a;
