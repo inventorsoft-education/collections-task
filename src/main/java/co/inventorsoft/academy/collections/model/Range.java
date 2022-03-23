@@ -1,16 +1,13 @@
 package co.inventorsoft.academy.collections.model;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 
 
 public class Range<T> implements Set<T> {
-
-    private List<T> mylist = new ArrayList();
+    private Set<T> mySetlist = new java.util.HashSet<>();
 
     private  Range() {
     }
@@ -29,69 +26,67 @@ public class Range<T> implements Set<T> {
 
 
     public int size() {
-        return mylist.size();
+        return mySetlist.size();
     }
 
     public boolean isEmpty() {
-        return mylist.isEmpty();
+        return mySetlist.isEmpty();
     }
 
     @Override
     public boolean contains(Object o) {
-        return mylist.contains(o);
+        return mySetlist.contains(o);
     }
 
     @Override
     public Iterator iterator() {
-        return mylist.iterator();
+        return mySetlist.iterator();
     }
 
     @Override
     public Object[] toArray() {
-        return mylist.toArray();
+        return mySetlist.toArray();
     }
 
     @Override
     public boolean remove(Object o) {
-        return mylist.remove(o);
+        return mySetlist.remove(o);
     }
 
     public boolean addAll(Collection<? extends T> c) {
-        return mylist.addAll(c) ;
+        return mySetlist.addAll(c) ;
     }
 
     @Override
     public void clear() {
-        mylist.clear();
+        mySetlist.clear();
     }
 
     @Override
     public boolean removeAll(Collection c) {
-        return mylist.removeAll(c);
+        return mySetlist.removeAll(c);
     }
 
     @Override
     public boolean retainAll(Collection c) {
 
-        return mylist.retainAll(c);
+        return mySetlist.retainAll(c);
     }
 
     @Override
     public boolean containsAll(Collection<?> c) {
-
-        return mylist.containsAll(c);
+        return mySetlist.containsAll(c);
     }
 
     @Override
     public <T1> T1[] toArray(T1[] o) {
-
-        return mylist.toArray(o);
+        return mySetlist.toArray(o);
     }
 
 
     public boolean add(T t) {
-        if (!mylist.contains(t)) {
-            return mylist.add(t);
+        if (!mySetlist.contains(t)) {
+            return mySetlist.add(t);
         }
         return false;
     }
