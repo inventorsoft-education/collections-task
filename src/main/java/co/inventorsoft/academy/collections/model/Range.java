@@ -9,7 +9,7 @@ import java.util.function.Function;
 public class Range<T> implements Set<T> {
     private java.util.List<T> mySetlist = new java.util.ArrayList<>();
 
-    private  Range() {
+    private Range() {
     }
 
     public static Range of(int i, int i1) {
@@ -54,10 +54,19 @@ public class Range<T> implements Set<T> {
     }
 
     public boolean addAll(Collection<? extends T> c) {
-        for(T e:c){
-            mySetlist.add(e);
-        }
-        return true;
+        boolean aaa = false;
+        for (T e : c) {
+            for (T e1 : mySetlist) {
+                {
+                    if (!(e == e1)) {
+                        mySetlist.add(e);
+                        aaa=true;
+                    } else {
+                      aaa=false;
+                    }
+                }
+            }
+        }return aaa;
     }
 
     @Override
