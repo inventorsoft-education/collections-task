@@ -54,19 +54,14 @@ public class Range<T> implements Set<T> {
     }
 
     public boolean addAll(Collection<? extends T> c) {
-        boolean aaa = false;
+        boolean a = false;
         for (T e : c) {
-            for (T e1 : mySetlist) {
-                {
-                    if (!(e == e1)) {
-                        mySetlist.add(e);
-                        aaa=true;
-                    } else {
-                      aaa=false;
-                    }
-                }
+            if (!mySetlist.contains(e)) {
+                mySetlist.add(e);
+                a = true;
             }
-        }return aaa;
+        }
+        return a;
     }
 
     @Override
