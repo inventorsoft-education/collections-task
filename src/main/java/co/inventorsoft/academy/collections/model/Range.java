@@ -7,7 +7,7 @@ import java.util.function.Function;
 
 
 public class Range<T> implements Set<T> {
-    private Set<T> mySetlist = new java.util.HashSet<>();
+    private java.util.List<T> mySetlist = new java.util.ArrayList<>();
 
     private  Range() {
     }
@@ -54,7 +54,10 @@ public class Range<T> implements Set<T> {
     }
 
     public boolean addAll(Collection<? extends T> c) {
-        return mySetlist.addAll(c) ;
+        for(T e:c){
+            mySetlist.add(e);
+        }
+        return true;
     }
 
     @Override
@@ -69,7 +72,6 @@ public class Range<T> implements Set<T> {
 
     @Override
     public boolean retainAll(Collection c) {
-
         return mySetlist.retainAll(c);
     }
 
