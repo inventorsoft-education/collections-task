@@ -34,7 +34,7 @@ class RangeTest {
     }
 
     @org.junit.jupiter.api.Test
-    void testToArray() {
+    void testToArray () {
     }
 
     @org.junit.jupiter.api.Test
