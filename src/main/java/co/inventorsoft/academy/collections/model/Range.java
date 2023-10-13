@@ -1,6 +1,5 @@
 package co.inventorsoft.academy.collections.model;
 
-
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.HashSet;
@@ -10,18 +9,44 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
-
 public class Range<T extends Comparable<T>> implements Set<T> {
+    private final Set<T> excluded = new HashSet<>();
     private T start;
     private T end;
-    private int size;
-    private Function<T, T> next;
-    private Set<T> excluded = new HashSet<>();
+    private final Function<T, T> next;
 
     private Range(T start, T end, Function<T, T> next) {
         this.start = start;
         this.end = end;
         this.next = next;
+    }
+
+    public static <T extends Comparable<T>> Range<T> of(T start, T end, Function<T, T> next) {
+        return new Range<>(start, end, next);
+    }
+
+    public static Range<Double> of(Double start, Double end) {
+        return of(start, end, current -> current + 0.1D);
+    }
+
+    public static Range<Float> of(Float start, Float end) {
+        return of(start, end, current -> current + 0.1F);
+    }
+
+    public static Range<Long> of(Long start, Long end) {
+        return of(start, end, current -> current + 1L);
+    }
+
+    public static Range<Integer> of(Integer start, Integer end) {
+        return of(start, end, current -> current + 1);
+    }
+
+    public static Range<Short> of(Short start, Short end) {
+        return of(start, end, current -> (short) (current + 1));
+    }
+
+    public static Range<Byte> of(Byte start, Byte end) {
+        return of(start, end, current -> (byte) (current + 1));
     }
 
     boolean isBetween(T element) {
@@ -37,7 +62,7 @@ public class Range<T extends Comparable<T>> implements Set<T> {
     }
 
     public int size() {
-        size = 0;
+        int size = 0;
         for (T t : this) {
             size++;
         }
@@ -45,8 +70,7 @@ public class Range<T extends Comparable<T>> implements Set<T> {
     }
 
     public boolean isEmpty() {
-        size();
-        return size == 1;
+        return size() == 1;
     }
 
     public boolean contains(Object o) {
@@ -61,7 +85,7 @@ public class Range<T extends Comparable<T>> implements Set<T> {
 
             @Override
             public boolean hasNext() {
-                while (current.compareTo(end) <= 0 && excluded != null && excluded.contains(current)) {
+                while (current.compareTo(end) <= 0 && excluded.contains(current)) {
                     current = next.apply(current);
                 }
                 return current.compareTo(end) <= 0;
@@ -126,7 +150,6 @@ public class Range<T extends Comparable<T>> implements Set<T> {
         return false;
     }
 
-
     public boolean containsAll(Collection<?> c) {
         return c.stream().allMatch(e -> isBetween((T) e) && !excluded.contains(e));
     }
@@ -134,6 +157,7 @@ public class Range<T extends Comparable<T>> implements Set<T> {
     public boolean addAll(Collection<? extends T> c) {
         return c.stream().anyMatch(this::isBetween);
     }
+
     @SuppressWarnings("unchecked")
     public boolean retainAll(Collection<?> c) {
         Optional<T> min = (Optional<T>) c.stream().min((o1, o2) -> ((T) o1).compareTo((T) o2));
@@ -147,44 +171,13 @@ public class Range<T extends Comparable<T>> implements Set<T> {
         return false;
     }
 
-
     public boolean removeAll(Collection<?> c) {
         return excluded.addAll((Collection<? extends T>) c);
     }
 
     public void clear() {
         end = start;
-        size = 1;
     }
-
-    public static <T extends Comparable<T>> Range<T> of(T start, T end, Function<T, T> next) {
-        return new Range<T>(start, end, next);
-    }
-
-    public static Range<Double> of(Double start, Double end) {
-        return of(start, end, current -> current + 0.1D);
-    }
-
-    public static Range<Float> of(Float start, Float end) {
-        return of(start, end, current -> current + 0.1F);
-    }
-
-    public static Range<Long> of(Long start, Long end) {
-        return of(start, end, current -> current + 1L);
-    }
-
-    public static Range<Integer> of(Integer start, Integer end) {
-        return of(start, end, current -> current + 1);
-    }
-
-    public static Range<Short> of(Short start, Short end) {
-        return of(start, end, current -> (short) (current + 1));
-    }
-
-    public static Range<Byte> of(Byte start, Byte end) {
-        return of(start, end, current -> (byte) (current + 1));
-    }
-
 
     public T getStart() {
         return start;

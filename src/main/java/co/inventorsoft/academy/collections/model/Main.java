@@ -1,6 +1,5 @@
 package co.inventorsoft.academy.collections.model;
 
-
 import java.util.Arrays;
 
 public class Main {
